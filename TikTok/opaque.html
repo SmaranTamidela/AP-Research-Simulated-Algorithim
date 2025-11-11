@@ -3,23 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>TikTok Feed - Opaque</title>
-  <link rel="stylesheet" href="TikTok/style.css">
-  <style>
-    .video-container {
-      margin: 20px 0;
-      text-align: center;
-    }
-    .video-container iframe {
-      width: 360px;
-      height: 640px;
-      border: none;
-    }
-    .engagement-buttons button {
-      margin: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/tiktok.css">
 </head>
 <body>
   <h1>TikTok Feed - Opaque</h1>
@@ -27,20 +11,20 @@
   <button id="exportData">Export Engagement Data</button>
 
   <script>
-    // 12 school-appropriate, high school-friendly YouTube videos
+    // 12 school-appropriate TikTok-style videos
     const videos = [
-      {id: "K5S81ZHxG9k", title: "Funny TikTok Compilation 2024"},
-      {id: "3JZ_D3ELwOQ", title: "Cool Science Experiment Video"},
-      {id: "dQw4w9WgXcQ", title: "Motivational Short (High School Friendly)"},
-      {id: "L3wKzyIN1yk", title: "Educational Animation - Physics Explained"},
-      {id: "9bZkp7q19f0", title: "Viral Dance Trend Compilation"},
-      {id: "e-ORhEE9VVg", title: "Top 5 Study Tips for Students"},
-      {id: "Ukg_U3CnJWI", title: "Funny Animal Compilation"},
-      {id: "2Vv-BfVoq4g", title: "Music Cover Short"},
-      {id: "J---aiyznGQ", title: "Amazing Trick Shots"},
-      {id: "kJQP7kiw5Fk", title: "Creative DIY Life Hacks"},
-      {id: "hTWKbfoikeg", title: "Cool Science Demo"},
-      {id: "RgKAFK5djSk", title: "Motivational Story Short"}
+      {id: "VbfpW0pbvaU", title: "Top TikTok Dance Clips"},
+      {id: "fLexgOxsZu0", title: "Funny Animal Short"},
+      {id: "60ItHLz5WEA", title: "Motivational Speech"},
+      {id: "3JZ_D3ELwOQ", title: "Cool Science Experiment"},
+      {id: "kJQP7kiw5Fk", title: "DIY Life Hacks"},
+      {id: "RgKAFK5djSk", title: "Positive Study Tips"},
+      {id: "Ukg_U3CnJWI", title: "Music Cover Short"},
+      {id: "hTWKbfoikeg", title: "Amazing Trick Shots"},
+      {id: "2Vv-BfVoq4g", title: "Popular Dance Clip"},
+      {id: "OPf0YbXqDm0", title: "Fun Compilation"},
+      {id: "M7lc1UVf-VE", title: "Educational Demo Video"},
+      {id: "E07s5ZYygMg", title: "Science Explainer Short"}
     ];
 
     // Load previous engagement data or create a new object
@@ -92,7 +76,7 @@
       feed.appendChild(container);
     });
 
-    // Export data
+    // Export data button
     document.getElementById('exportData').onclick = () => {
       const dataStr = JSON.stringify(engagementData, null, 2);
       const blob = new Blob([dataStr], {type: "application/json"});
