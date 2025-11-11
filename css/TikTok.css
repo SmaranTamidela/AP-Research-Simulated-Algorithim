@@ -1,0 +1,91 @@
+/* General body style */
+body {
+    background-color: #000; /* Dark TikTok-style background */
+    color: #fff;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Page title */
+h1 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+/* Video container styling */
+.video-container {
+    background-color: #121212; /* Slightly lighter black for cards */
+    padding: 15px;
+    border-radius: 15px;
+    margin: 20px auto;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* Embed iframe video */
+.video-container iframe {
+    width: 100%;
+    height: 700px;
+    border-radius: 10px;
+    border: none;
+}
+
+/* Video title */
+.video-container p {
+    font-size: 1em;
+    margin: 10px 0 5px;
+    color: #fff;
+    text-align: center;
+}
+
+/* Engagement buttons container */
+.engagement-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* Like / Skip buttons */
+.engagement-buttons button {
+    background-color: #ff0050; /* TikTok pink/red accent */
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.engagement-buttons button:hover {
+    transform: scale(1.1);
+    background-color: #ff3399;
+}
+
+/* Export button */
+#exportData {
+    display: block;
+    margin: 30px auto;
+    background-color: #25f4ee; /* TikTok blue accent */
+    color: #000;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#exportData:hover {
+    transform: scale(1.05);
+    background-color: #00ffff;
+}
+
+/* Scroll behavior for smoother feed feel */
+html {
+    scroll-behavior: smooth;
+}
