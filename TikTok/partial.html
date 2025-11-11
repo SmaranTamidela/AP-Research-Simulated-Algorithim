@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TikTok Feed - Partial Transparency</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .video-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+    .video-container iframe {
+      width: 360px;
+      height: 640px;
+      border: none;
+    }
+    .engagement-buttons button {
+      margin: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>TikTok Feed - Partial Transparency</h1>
+  <div id="feed"></div>
+  <button id="exportData">Export Engagement Data</button>
+
+  <script>
+    // 12 school-appropriate YouTube videos for high school juniors
+    const videos = [
+      {id: "VbfpW0pbvaU", title: "Top TikTok Dance Compilation"},
+      {id: "fLexgOxsZu0", title: "Funny Animal Short"},
+      {id: "60ItHLz5WEA", title: "Motivational Speech"},
+      {id: "3JZ_D3ELwOQ", title: "Cool Science Experiment"},
+      {id: "kJQP7kiw5Fk", title: "DIY Life Hacks"},
+      {id: "RgKAFK5djSk", title: "Positive Study Tips"},
+      {id: "Ukg_U3CnJWI", title: "Music Cover Short"},
+      {id: "hTWKbfoikeg", title: "Amazing Trick Shots"},
+      {id: "2Vv-BfVoq4g", title: "Popular Dance Clip"},
+      {id: "OPf0YbXqDm0", title: "Fun TikTok Compilation"},
+      {id: "M7lc1UVf-VE", title: "Educational Demo Video"},
+      {id: "E07s5ZYygMg", title: "Science Explainer Short"}
+    ];
+
+    // Load previous engagement data or create a new object
+    let engagementData = JSON.parse(localStorage.getItem('tiktok_partial_engagement')) || {};
+
+    const feed = document.getElementById('feed');
+
+    videos.forEach(video => {
+      const container = document.createElement('div');
+      container.className = 'video-container';
+
+      // Video embed
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${video.id}?enablejsapi=1`;
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      container.appendChild(iframe);
+
+      // Title
+      const title = document.createElement('p');
+      title.textContent = video.title;
+      container.appendChild(title);
+
+      // Engagement buttons
+      const buttons = document.createElement('div');
+      buttons.className = 'engagement-buttons';
+
+      const likeBtn = document.createElement('button');
+      likeBtn.textContent = 'Like';
+      likeBtn.onclick = () => {
+        engagementData[video.id] = engagementData[video.id] || {likes:0, skips:0, retention:0};
+        engagementData[video.id].likes++;
+        localStorage.setItem('tiktok_partial_engagement', JSON.stringify(engagementData));
+        alert(`Liked! Total likes: ${engagementData[video.id].likes}`);
+      };
+
+      const skipBtn = document.createElement('button');
+      skipBtn.textContent = 'Skip';
+      skipBtn.onclick = () => {
+        engagementData[video.id] = engagementData[video.id] || {likes:0, skips:0, retention:0};
+        engagementData[video.id].skips++;
+        localStorage.setItem('tiktok_partial_engagement', JSON.stringify(engagementData));
+        alert(`Skipped! Total skips: ${engagementData[video.id].skips}`);
+      };
+
+      buttons.appendChild(likeBtn);
+      buttons.appendChild(skipBtn);
+      container.appendChild(buttons);
+
+      feed.appendChild(container);
+    });
+
+    // Export data button
+    document.getElementById('exportData').onclick = () => {
+      const dataStr = JSON.stringify(engagementData, null, 2);
+      const blob = new Blob([dataStr], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "tiktok_partial_engagement.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+  </script>
+</body>
+</html>
 
