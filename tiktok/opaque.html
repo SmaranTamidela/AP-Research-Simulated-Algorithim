@@ -3,126 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TikTok Opaque Feed</title>
-    <link rel="stylesheet" href="../css/TikTok.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <title>Video Feed - Opaque</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<header>
-    <div class="logo">
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/6/69/TikTok_logo.svg/1200px-TikTok_logo.svg.png" alt="TikTok Logo">
-        <h1>TikTok</h1>
-    </div>
-
-    <div class="search-container">
-        <input type="text" class="search-box" placeholder="Search">
-        <i class="fas fa-search search-icon"></i>
-    </div>
-
-    <div class="nav-actions">
-        <button class="upload-btn"><i class="fas fa-upload"></i> Upload</button>
-        <button class="login-btn">Log in</button>
-    </div>
-</header>
-
-<div class="main-container">
-
-    <aside class="sidebar">
-        <!-- Sidebar same as previous HTML -->
-    </aside>
-
-    <main class="content-feed">
-        <div class="feed-tabs">
-            <div class="feed-tab active">For You</div>
-            <div class="feed-tab">Following</div>
+    <header>
+        <div class="logo">
+            <h1>VideoVibe</h1>
         </div>
+        <div class="nav-actions">
+            <button class="upload-btn">Upload</button>
+            <button class="login-btn">Log in</button>
+        </div>
+    </header>
 
-        <div class="video-grid" id="video-grid">
-            <!-- Placeholder for videos; add your username and video link later -->
-            <!-- Example Video Card -->
-            <div class="video-card" data-username="username1" data-video-link="LINK_HERE">
-                <div class="video-thumbnail">
-                    <video class="thumbnail-video" width="100%" muted preload="metadata">
-                        <source src="" type="video/mp4">
-                        Your browser does not support HTML video.
-                    </video>
-                    <div class="video-duration">0:15</div>
-                </div>
-                <div class="video-info">
-                    <div class="video-creator">
-                        <img src="https://i.pravatar.cc/24" alt="Avatar" class="creator-avatar">
-                        <span class="creator-name">@username1</span>
+    <main class="main-container">
+        <aside class="sidebar">
+            <!-- You can keep sidebar content same as reference or simplify -->
+        </aside>
+
+        <section class="content-feed">
+            <div class="video-grid">
+                <!-- 12 placeholder video cards -->
+                <!-- Each card has a vertical 9:16 placeholder, title, creator, stats -->
+                <!-- Algorithm info hidden for opaque -->
+                <!-- Video 1 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+1" class="thumbnail-img" alt="Video 1">
                     </div>
-                    <div class="video-title">Video Title Here</div>
-                    <div class="video-stats">
-                        <div class="stat-item like-btn"><i class="fas fa-heart"></i> <span class="like-count">0</span></div>
-                        <div class="stat-item favorite-btn"><i class="fas fa-star"></i> <span class="favorite-count">0</span></div>
-                        <div class="stat-item skip-btn"><i class="fas fa-forward"></i></div>
+                    <div class="video-info">
+                        <div class="video-creator">creator1</div>
+                        <div class="video-title">Sample Video Title 1</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 2 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+2" class="thumbnail-img" alt="Video 2">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator2</div>
+                        <div class="video-title">Sample Video Title 2</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 3 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+3" class="thumbnail-img" alt="Video 3">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator3</div>
+                        <div class="video-title">Sample Video Title 3</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 4 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+4" class="thumbnail-img" alt="Video 4">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator4</div>
+                        <div class="video-title">Sample Video Title 4</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 5 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+5" class="thumbnail-img" alt="Video 5">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator5</div>
+                        <div class="video-title">Sample Video Title 5</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 6 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+6" class="thumbnail-img" alt="Video 6">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator6</div>
+                        <div class="video-title">Sample Video Title 6</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 7 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+7" class="thumbnail-img" alt="Video 7">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator7</div>
+                        <div class="video-title">Sample Video Title 7</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 8 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+8" class="thumbnail-img" alt="Video 8">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator8</div>
+                        <div class="video-title">Sample Video Title 8</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 9 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+9" class="thumbnail-img" alt="Video 9">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator9</div>
+                        <div class="video-title">Sample Video Title 9</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 10 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+10" class="thumbnail-img" alt="Video 10">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator10</div>
+                        <div class="video-title">Sample Video Title 10</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 11 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+11" class="thumbnail-img" alt="Video 11">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator11</div>
+                        <div class="video-title">Sample Video Title 11</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                    </div>
+                </div>
+
+                <!-- Video 12 -->
+                <div class="video-card">
+                    <div class="video-thumbnail">
+                        <img src="https://via.placeholder.com/225x400?text=Video+12" class="thumbnail-img" alt="Video 12">
+                    </div>
+                    <div class="video-info">
+                        <div class="video-creator">creator12</div>
+                        <div class="video-title">Sample Video Title 12</div>
+                        <div class="video-stats">
+                            <span>❤ 0</span>
+                            <span>💬 0</span>
+                            <span>↗ 0</span>
+                        </div>
+                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        </section>
     </main>
-
-</div>
-
-<script>
-    // Engagement logging
-    const engagementData = {};
-
-    document.querySelectorAll('.video-card').forEach((card, index) => {
-        const username = card.dataset.username;
-        const videoLink = card.dataset.videoLink;
-        const video = card.querySelector('.thumbnail-video');
-        const likeBtn = card.querySelector('.like-btn');
-        const favoriteBtn = card.querySelector('.favorite-btn');
-        const skipBtn = card.querySelector('.skip-btn');
-
-        engagementData[username] = {
-            videoLink: videoLink,
-            likes: 0,
-            favorites: 0,
-            watchTime: 0,
-            skips: 0
-        };
-
-        // Track play time
-        video.addEventListener('timeupdate', () => {
-            engagementData[username].watchTime = video.currentTime;
-        });
-
-        // Like button
-        likeBtn.addEventListener('click', () => {
-            engagementData[username].likes++;
-            likeBtn.querySelector('span').textContent = engagementData[username].likes;
-        });
-
-        // Favorite button
-        favoriteBtn.addEventListener('click', () => {
-            engagementData[username].favorites++;
-            favoriteBtn.querySelector('span').textContent = engagementData[username].favorites;
-        });
-
-        // Skip button
-        skipBtn.addEventListener('click', () => {
-            engagementData[username].skips++;
-            // Move to next video in the grid
-            const nextVideo = card.nextElementSibling;
-            if (nextVideo) nextVideo.scrollIntoView({behavior: "smooth"});
-        });
-    });
-
-    // Optional: function to export data (console log for now)
-    function exportEngagement() {
-        console.log(JSON.stringify(engagementData, null, 2));
-    }
-
-    // Example: call exportEngagement when user leaves page
-    window.addEventListener('beforeunload', exportEngagement);
-</script>
-
 </body>
 </html>
-
