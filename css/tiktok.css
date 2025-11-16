@@ -1,11 +1,11 @@
-/* TikTok-like Feed CSS */
+/* TikTok-style Feed */
 body {
     margin: 0;
     padding: 0;
     background-color: #000;
-    color: #fff;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     overflow-x: hidden;
+    color: #fff;
 }
 
 #feed {
@@ -19,26 +19,31 @@ body {
 .video-container {
     scroll-snap-align: start;
     position: relative;
-    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 100vh;
     background-color: #000;
 }
 
+/* Video wrapper to enforce 9:16 aspect ratio */
 .video-container blockquote {
-    width: 100%;
-    max-width: 400px;
+    width: 56.25%; /* 9:16 ratio => width/height = 9/16 = 0.5625 */
     height: 100%;
+    max-width: 400px; /* optional max width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* TikTok vertical buttons on the right */
 .engagement-buttons {
     position: absolute;
-    right: 10px;
+    right: 15px;
     bottom: 100px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
 }
 
 .engagement-buttons button {
@@ -46,7 +51,7 @@ body {
     height: 50px;
     border-radius: 50%;
     border: none;
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -55,11 +60,12 @@ body {
 }
 
 .engagement-buttons button:hover {
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Heart shape (Like button) */
-.engagement-buttons button.like::after {
+/* Heart shape (like/favorite) */
+.engagement-buttons button.like::after,
+.engagement-buttons button.favorite::after {
     content: '';
     width: 20px;
     height: 20px;
@@ -85,3 +91,4 @@ body {
     border-bottom: 2px solid #fff;
     transform: rotate(-45deg);
 }
+
