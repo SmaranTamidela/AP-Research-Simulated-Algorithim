@@ -431,3 +431,50 @@ header {
         grid-template-columns: 1fr;
     }
 }
+
+/* Dark Mode Overrides */
+body {
+    background-color: var(--dark);
+    color: var(--light);
+}
+
+header {
+    background-color: #1a1a1a;
+    color: var(--light);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+}
+
+button {
+    color: var(--light);
+}
+
+.video-card {
+    background-color: #1e1e1e;
+}
+
+.video-info {
+    background-color: #2a2a2a;
+    color: var(--light);
+}
+
+.algorithm-info {
+    background-color: rgba(50, 50, 50, 0.8);
+    color: var(--secondary);
+}
+
+/* 9:16 Ratio for Video Thumbnails */
+.video-thumbnail {
+    padding-top: 177.77%; /* 16:9 originally */
+}
+.video-thumbnail {
+    padding-top: 177.77%; /* Keep original if needed */
+}
+
+/* For proper 9:16, use: */
+.video-thumbnail {
+    padding-top: 177.77%; /* if you want full portrait */
+}
+.video-thumbnail {
+    padding-top: 177.77%; /* 9:16 */
+}
+
