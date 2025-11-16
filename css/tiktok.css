@@ -1,105 +1,177 @@
-/* TikTok-style Feed */
-
-body {
+/* RESET */
+* {
     margin: 0;
     padding: 0;
-    background-color: #000;
-    font-family: 'Helvetica Neue', sans-serif;
-    color: #fff;
-    overflow-x: hidden;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-#feed {
-    display: flex;
-    flex-direction: column;
-    scroll-snap-type: y mandatory;
-    overflow-y: scroll;
-    height: 100vh;
+:root {
+    --tiktok-red: #fe2c55;
+    --tiktok-blue: #25f4ee;
+    --text-light: #fff;
+    --text-dark: #161823;
+    --ui-black: #000;
 }
 
+body {
+    background: #000;
+    color: var(--text-light);
+    overflow: hidden;
+}
+
+/* MAIN VIDEO WRAPPER (full screen) */
 .video-container {
-    scroll-snap-align: start;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #000;
 }
 
-.video-container blockquote {
-    width: 56.25%; /* 9:16 ratio */
+.video-container video {
+    width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    object-fit: cover;
 }
 
-.engagement-buttons {
+/* RIGHT ACTION BAR */
+.actions {
     position: absolute;
-    right: 15px;
-    bottom: 100px;
+    right: 12px;
+    bottom: 120px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-}
-
-.engagement-buttons button {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: none;
-    background-color: rgba(255, 255, 255, 0.2);
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    transition: all 0.2s ease-in-out;
+    gap: 26px;
 }
 
-.engagement-buttons button:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--text-light);
+    font-size: 13px;
 }
 
-/* Heart shape (like/favorite) */
-.engagement-buttons button.like::after,
-.engagement-buttons button.favorite::after {
-    content: '';
-    width: 20px;
-    height: 20px;
-    background: red;
-    clip-path: polygon(
-        50% 0%, 61% 17%, 79% 17%, 100% 36%, 100% 61%, 
-        79% 80%, 50% 100%, 21% 80%, 0% 61%, 0% 36%, 
-        21% 17%, 39% 17%
-    );
+.action-btn i {
+    font-size: 30px;
+    margin-bottom: 4px;
+    transition: transform .2s ease;
 }
 
-/* Comment bubble */
-.engagement-buttons button.comment::after {
-    content: '';
-    width: 20px;
-    height: 20px;
-    background: #fff;
-    clip-path: polygon(
-        10% 0%, 90% 0%, 90% 70%, 50% 70%, 30% 100%, 
-        30% 70%, 10% 70%
-    );
+.action-btn:hover i {
+    transform: scale(1.2);
 }
 
-/* Share arrow */
-.engagement-buttons button.share::after {
-    content: '';
-    width: 20px;
-    height: 20px;
-    border-left: 2px solid #fff;
-    border-bottom: 2px solid #fff;
-    transform: rotate(-45deg);
+/* PROFILE ICON ABOVE LIKES */
+.profile-pic {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid white;
+    object-fit: cover;
+}
+
+/* CAPTION & MUSIC BAR (BOTTOM LEFT) */
+.video-info {
+    position: absolute;
+    bottom: 70px;
+    left: 12px;
+    width: 70%;
+}
+
+.username {
+    font-weight: 700;
+    margin-bottom: 6px;
 }
 
 .caption {
+    font-size: 14px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+}
+
+.music {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+}
+
+.music i {
+    font-size: 16px;
+}
+
+/* SPINNING ALBUM COVER */
+.record {
+    position: absolute;
+    right: 10px;
+    bottom: 40px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    animation: spin 4s linear infinite;
+    border: 2px solid #444;
+}
+
+.record img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* SPINNING ANIMATION */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* SWIPE INDICATOR */
+.swipe-up {
     position: absolute;
     bottom: 15px;
-    left: 10px;
-    font-size: 14px;
-    max-width: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    opacity: .5;
+    font-size: 13px;
+    letter-spacing: .5px;
+}
+
+/* OPAQUE – APPLY WHITE OVERLAY */
+.opaque-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 1;
+    pointer-events: none;
+}
+
+/* PARTIAL OPACITY */
+.partial-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* FULLY VISIBLE (NO OVERLAY) */
+.full-visible {
+    opacity: 1;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 450px) {
+    .actions {
+        bottom: 100px;
+        right: 10px;
+    }
+    .video-info {
+        bottom: 60px;
+    }
 }
