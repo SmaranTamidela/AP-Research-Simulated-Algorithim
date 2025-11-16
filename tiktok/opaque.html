@@ -4,234 +4,221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Feed - Opaque</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <div class="logo">
-            <h1>VideoVibe</h1>
-        </div>
-        <div class="nav-actions">
-            <button class="upload-btn">Upload</button>
-            <button class="login-btn">Log in</button>
-        </div>
+        <h1>Video Feed</h1>
+        <button>Log In</button>
     </header>
 
-    <main class="main-container">
-        <aside class="sidebar">
-            <!-- You can keep sidebar content same as reference or simplify -->
-        </aside>
-
-        <section class="content-feed">
-            <div class="video-grid">
-                <!-- 12 placeholder video cards -->
-                <!-- Each card has a vertical 9:16 placeholder, title, creator, stats -->
-                <!-- Algorithm info hidden for opaque -->
-                <!-- Video 1 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+1" class="thumbnail-img" alt="Video 1">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator1</div>
-                        <div class="video-title">Sample Video Title 1</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
+    <main class="content-feed opaque">
+        <div class="video-grid">
+            <!-- 12 Video Cards -->
+            <!-- Video 1 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+1" class="thumbnail-img" alt="Video 1">
+                    <div class="video-duration">0:30</div>
                 </div>
-
-                <!-- Video 2 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+2" class="thumbnail-img" alt="Video 2">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator2</div>
-                        <div class="video-title">Sample Video Title 2</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 3 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+3" class="thumbnail-img" alt="Video 3">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator3</div>
-                        <div class="video-title">Sample Video Title 3</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 4 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+4" class="thumbnail-img" alt="Video 4">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator4</div>
-                        <div class="video-title">Sample Video Title 4</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 5 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+5" class="thumbnail-img" alt="Video 5">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator5</div>
-                        <div class="video-title">Sample Video Title 5</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 6 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+6" class="thumbnail-img" alt="Video 6">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator6</div>
-                        <div class="video-title">Sample Video Title 6</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 7 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+7" class="thumbnail-img" alt="Video 7">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator7</div>
-                        <div class="video-title">Sample Video Title 7</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 8 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+8" class="thumbnail-img" alt="Video 8">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator8</div>
-                        <div class="video-title">Sample Video Title 8</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 9 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+9" class="thumbnail-img" alt="Video 9">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator9</div>
-                        <div class="video-title">Sample Video Title 9</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 10 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+10" class="thumbnail-img" alt="Video 10">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator10</div>
-                        <div class="video-title">Sample Video Title 10</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 11 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+11" class="thumbnail-img" alt="Video 11">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator11</div>
-                        <div class="video-title">Sample Video Title 11</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
-                    </div>
-                </div>
-
-                <!-- Video 12 -->
-                <div class="video-card">
-                    <div class="video-thumbnail">
-                        <img src="https://via.placeholder.com/225x400?text=Video+12" class="thumbnail-img" alt="Video 12">
-                    </div>
-                    <div class="video-info">
-                        <div class="video-creator">creator12</div>
-                        <div class="video-title">Sample Video Title 12</div>
-                        <div class="video-stats">
-                            <span>❤ 0</span>
-                            <span>💬 0</span>
-                            <span>↗ 0</span>
-                        </div>
-                        <div class="algorithm-info" style="display:none;">Why shown: Opaque</div>
+                <div class="video-info">
+                    <div class="video-creator">creator_1</div>
+                    <div class="video-title">Video 1 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 1.2K</div>
+                        <div class="stat-item">💬 120</div>
+                        <div class="stat-item">↗ 45</div>
                     </div>
                 </div>
             </div>
-        </section>
+
+            <!-- Video 2 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+2" class="thumbnail-img" alt="Video 2">
+                    <div class="video-duration">0:45</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_2</div>
+                    <div class="video-title">Video 2 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 950</div>
+                        <div class="stat-item">💬 80</div>
+                        <div class="stat-item">↗ 30</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 3 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+3" class="thumbnail-img" alt="Video 3">
+                    <div class="video-duration">1:00</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_3</div>
+                    <div class="video-title">Video 3 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 1.5K</div>
+                        <div class="stat-item">💬 200</div>
+                        <div class="stat-item">↗ 60</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 4 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+4" class="thumbnail-img" alt="Video 4">
+                    <div class="video-duration">0:50</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_4</div>
+                    <div class="video-title">Video 4 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 700</div>
+                        <div class="stat-item">💬 60</div>
+                        <div class="stat-item">↗ 25</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 5 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+5" class="thumbnail-img" alt="Video 5">
+                    <div class="video-duration">0:40</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_5</div>
+                    <div class="video-title">Video 5 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 1K</div>
+                        <div class="stat-item">💬 90</div>
+                        <div class="stat-item">↗ 40</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 6 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+6" class="thumbnail-img" alt="Video 6">
+                    <div class="video-duration">1:10</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_6</div>
+                    <div class="video-title">Video 6 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 1.3K</div>
+                        <div class="stat-item">💬 150</div>
+                        <div class="stat-item">↗ 50</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 7 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+7" class="thumbnail-img" alt="Video 7">
+                    <div class="video-duration">0:35</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_7</div>
+                    <div class="video-title">Video 7 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 800</div>
+                        <div class="stat-item">💬 70</div>
+                        <div class="stat-item">↗ 20</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 8 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+8" class="thumbnail-img" alt="Video 8">
+                    <div class="video-duration">0:55</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_8</div>
+                    <div class="video-title">Video 8 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 1.1K</div>
+                        <div class="stat-item">💬 100</div>
+                        <div class="stat-item">↗ 35</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 9 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+9" class="thumbnail-img" alt="Video 9">
+                    <div class="video-duration">0:48</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_9</div>
+                    <div class="video-title">Video 9 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 900</div>
+                        <div class="stat-item">💬 85</div>
+                        <div class="stat-item">↗ 28</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 10 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+10" class="thumbnail-img" alt="Video 10">
+                    <div class="video-duration">0:42</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_10</div>
+                    <div class="video-title">Video 10 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 750</div>
+                        <div class="stat-item">💬 65</div>
+                        <div class="stat-item">↗ 22</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 11 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+11" class="thumbnail-img" alt="Video 11">
+                    <div class="video-duration">1:05</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_11</div>
+                    <div class="video-title">Video 11 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 1K</div>
+                        <div class="stat-item">💬 95</div>
+                        <div class="stat-item">↗ 33</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 12 -->
+            <div class="video-card">
+                <div class="video-thumbnail">
+                    <img src="https://via.placeholder.com/180x320?text=Video+12" class="thumbnail-img" alt="Video 12">
+                    <div class="video-duration">0:38</div>
+                </div>
+                <div class="video-info">
+                    <div class="video-creator">creator_12</div>
+                    <div class="video-title">Video 12 Title</div>
+                    <div class="video-stats">
+                        <div class="stat-item">❤ 880</div>
+                        <div class="stat-item">💬 78</div>
+                        <div class="stat-item">↗ 29</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </body>
 </html>
