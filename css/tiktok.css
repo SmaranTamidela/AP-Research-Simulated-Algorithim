@@ -19,38 +19,71 @@ body, html {
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Each video card fills the screen */
+/* Each video card */
 .video-card {
   height: 100vh;
   width: 100%;
-  position: relative;
   scroll-snap-align: start;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Video element styling */
+/* 9:16 video */
 .video {
-  height: 100%;
-  width: auto;
-  max-width: 100%;
+  width: 45%;       /* Adjust for 9:16 ratio on desktop, tweak for mobile */
+  aspect-ratio: 9 / 16;
   object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 /* Video title overlay */
 .video-title {
   position: absolute;
-  bottom: 40px;
+  bottom: 100px;
   left: 20px;
   color: white;
   font-size: 1.5rem;
   text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
-/* Smooth scroll behavior */
+/* Right sidebar for buttons */
+.video-actions {
+  position: absolute;
+  right: 15px;
+  bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: center;
+}
+
+.video-actions div {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.video-actions div:hover {
+  transform: scale(1.2);
+}
+
+/* Smooth scroll */
 .feed-container {
   scroll-behavior: smooth;
 }
