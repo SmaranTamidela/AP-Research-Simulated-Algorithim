@@ -8,31 +8,26 @@ body {
   font-family: Arial, sans-serif;
   background-color: #000;
   color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   overflow-y: scroll;
   height: 100vh;
   scroll-snap-type: y mandatory;
 }
 
 .video-container {
-  width: 360px;
-  height: 640px; /* 9:16 */
+  width: 100vw;      /* full viewport width */
+  height: 100vh;     /* full viewport height */
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
-  background-color: #000;
-  margin-bottom: 20px;
   scroll-snap-align: start;
+  background-color: #000;
 }
 
 .video-container video {
   position: absolute;
   top: 50%;
   left: 50%;
-  height: 100%;
   width: auto;
+  height: 100%;
   transform: translate(-50%, -50%);
   object-fit: cover;
 }
@@ -44,6 +39,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  z-index: 5;
 }
 
 .side-icons div {
@@ -64,12 +60,12 @@ body {
   transform: scale(1.2);
 }
 
-.side-icons div.active {
+.side-icons .like.active {
   color: #ff0050; /* like button active */
 }
 
 .side-icons .favorite.active {
-  color: yellow; /* bookmark button active */
+  color: yellow;  /* bookmark/favorite button active */
 }
 
 .video-info {
@@ -77,6 +73,7 @@ body {
   left: 10px;
   bottom: 10px;
   max-width: 70%;
+  z-index: 5;
 }
 
 .video-info .username {
@@ -104,7 +101,7 @@ body {
   font-size: 14px;
   max-width: 80%;
   z-index: 10;
-  white-space: pre-line;
+  white-space: pre-line; /* preserve line breaks */
 }
 
 body::-webkit-scrollbar {
