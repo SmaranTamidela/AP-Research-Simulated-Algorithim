@@ -130,6 +130,7 @@ function createVideoCard(videoObj) {
   vid.controls = false;
   vid.autoplay = true;
   vid.loop = false;
+  vid.muted = true;
 
   // attach metrics object
   const metrics = videoMetrics.get(videoObj.src);
