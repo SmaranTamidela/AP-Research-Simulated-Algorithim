@@ -82,7 +82,8 @@ function chooseNextVideoFull(currentCategory) {
 function createVideoCardFull(videoObj) {
   const card = document.createElement("div"); card.className="video-card";
   const vid = document.createElement("video");
-  vid.src = videoObj.src; vid.controls=false; vid.autoplay=true; vid.loop=false;
+  vid.src = videoObj.src; vid.controls=false; vid.autoplay=true; vid.loop=false; vid.muted = true;
+
 
   const metrics = videoMetrics.get(videoObj.src);
   let counted25=false;
