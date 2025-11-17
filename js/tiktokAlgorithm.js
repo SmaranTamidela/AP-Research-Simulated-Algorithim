@@ -1,7 +1,7 @@
 // js/tiktokAlgorithm.js (opaque feed)
 // Full recommendation map and video list included; session-based selection (Option B)
 
-// ---------- Recommendation Map ----------
+// ---------- Recommendation Map ---------- 
 const recommendationMap = {
   "earth": { high: ["science","technology"], moderate: ["travel","animal"], low: ["art","knitting"] },
   "food":  { high: ["travel","party"],     moderate: ["science","technology"], low: ["knitting","art"] },
