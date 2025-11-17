@@ -116,5 +116,5 @@ function initFullFeed(){
     }
   });
 } 
-
+ 
 initFullFeed();
