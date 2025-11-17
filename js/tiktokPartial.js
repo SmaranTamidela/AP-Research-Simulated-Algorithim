@@ -6,7 +6,6 @@ const tiktokVideos = [
   "soccertiktok.mp4","technologytiktok.mp4","traveltiktok.mp4"
 ];
 
-// Recommendation mapping (same as opaque)
 const recommendationMap = { 
   earth: { high:["science","technology"], moderate:["travel","animal"], low:["art","knitting"] },
   food: { high:["travel","party"], moderate:["science","technology"], low:["knitting","art"] },
@@ -25,76 +24,76 @@ const recommendationMap = {
   party: { high:["gaming","singing"], moderate:["food","travel"], low:["knitting","art"] }
 };
 
-let engagementMetrics = {}; 
-
+let engagementMetrics = {};
 const videoContainers = document.querySelectorAll(".video-container");
 
-videoContainers.forEach((container, idx) => {
+videoContainers.forEach((container) => {
   const videoEl = container.querySelector("video");
   const likeBtn = container.querySelector(".like");
   const favBtn = container.querySelector(".favorite");
   const overlay = container.querySelector(".recommendation-overlay");
 
-  let currentVideo = tiktokVideos[Math.floor(Math.random()*tiktokVideos.length)];
+  let currentVideo = tiktokVideos[Math.floor(Math.random() * tiktokVideos.length)];
   videoEl.src = "../videos/" + currentVideo;
   engagementMetrics[currentVideo] = { liked: false, favorited: false, watchedPercent: 0 };
 
-  // Buttons
-  likeBtn.addEventListener("click", ()=>{
+  // Like button
+  likeBtn.addEventListener("click", () => {
     engagementMetrics[currentVideo].liked = !engagementMetrics[currentVideo].liked;
     likeBtn.classList.toggle("active");
     updateOverlay(currentVideo, overlay);
   });
-  favBtn.addEventListener("click", ()=>{
+
+  // Bookmark button
+  favBtn.addEventListener("click", () => {
     engagementMetrics[currentVideo].favorited = !engagementMetrics[currentVideo].favorited;
-    favBtn.classList.toggle("active");
+    favBtn.style.color = engagementMetrics[currentVideo].favorited ? "yellow" : "#fff";
     updateOverlay(currentVideo, overlay);
   });
 
   // Watched percent
-  videoEl.addEventListener("timeupdate", ()=>{
+  videoEl.addEventListener("timeupdate", () => {
     engagementMetrics[currentVideo].watchedPercent = (videoEl.currentTime / videoEl.duration) * 100;
     updateOverlay(currentVideo, overlay);
   });
 
-  // Next video
-  videoEl.addEventListener("ended", ()=>{
+  // On video end
+  videoEl.addEventListener("ended", () => {
     const engagement = getEngagementLevel(engagementMetrics[currentVideo]);
     const nextVideo = getNextVideo(currentVideo, engagement);
     currentVideo = nextVideo;
-    if(!engagementMetrics[nextVideo]) engagementMetrics[nextVideo] = { liked:false, favorited:false, watchedPercent:0 };
+
+    if (!engagementMetrics[nextVideo]) engagementMetrics[nextVideo] = { liked: false, favorited: false, watchedPercent: 0 };
     videoEl.src = "../videos/" + nextVideo;
-    updateOverlay(currentVideo, overlay);
     videoEl.play();
+    updateOverlay(currentVideo, overlay);
   });
 
   updateOverlay(currentVideo, overlay);
 });
 
-// Engagement level
-function getEngagementLevel(metrics){
-  if(metrics.favorited || metrics.watchedPercent>75) return "high";
-  if(metrics.liked || metrics.watchedPercent>25) return "moderate";
+function getEngagementLevel(metrics) {
+  if (metrics.favorited || metrics.watchedPercent > 75) return "high";
+  if (metrics.liked || metrics.watchedPercent > 25) return "moderate";
   return "low";
 }
 
-// Recommendation next video
-function getNextVideo(currentVideo, engagementLevel){
-  const baseName = currentVideo.replace("tiktok.mp4","");
+function getNextVideo(currentVideo, engagementLevel) {
+  const baseName = currentVideo.replace("tiktok.mp4", "");
   const nextCategories = recommendationMap[baseName][engagementLevel];
-  for(let cat of nextCategories){
-    const nextVid = tiktokVideos.find(v=>v.includes(cat));
-    if(nextVid) return nextVid;
+  for (let cat of nextCategories) {
+    const nextVid = tiktokVideos.find(v => v.includes(cat));
+    if (nextVid) return nextVid;
   }
-  return tiktokVideos[Math.floor(Math.random()*tiktokVideos.length)];
+  return tiktokVideos[Math.floor(Math.random() * tiktokVideos.length)];
 }
 
-// Partial transparency overlay update
-function updateOverlay(videoName, overlay){
+// Partial transparency overlay
+function updateOverlay(videoName, overlay) {
   const metrics = engagementMetrics[videoName];
   let reason = "Recommended based on your activity";
-  if(metrics.favorited) reason = "Recommended because you favorited a similar video";
-  else if(metrics.liked) reason = "Recommended because you liked a similar video";
-  else if(metrics.watchedPercent>25) reason = "Recommended because you watched part of a similar video";
+  if (metrics.favorited) reason = "Recommended because you bookmarked a similar video";
+  else if (metrics.liked) reason = "Recommended because you liked a similar video";
+  else if (metrics.watchedPercent > 25) reason = "Recommended because you watched part of a similar video";
   overlay.textContent = reason;
 }
