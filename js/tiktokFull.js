@@ -69,7 +69,11 @@ function createVideoCardFull(videoObj){
   const favText=document.createElement("div");favText.className="favorite-label";favText.textContent="Favorite";
   actions.appendChild(likeBtn);actions.appendChild(favBtn);actions.appendChild(favText);
 
-  const captionBox=document.createElement("div");captionBox.className="caption-box";captionBox.innerHTML=`<div class="username">${videoObj.username}</div>${videoObj.caption}`;
+const captionBox = document.createElement("div");
+captionBox.className = "caption-box";
+captionBox.innerHTML = `<div class="username">${videoObj.username}</div>${videoObj.caption}`;
+card.appendChild(captionBox);
+
 
   const expBox=document.createElement("div");expBox.className="explanation-box";
 
