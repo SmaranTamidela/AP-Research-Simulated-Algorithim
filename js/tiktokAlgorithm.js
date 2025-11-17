@@ -1,115 +1,83 @@
-// Video list
-const tiktokVideos = [
-  "animaltiktok.mp4","arttiktok.mp4","basketballtiktok.mp4",
-  "boxingtiktok.mp4","drivingtiktok.mp4","earthtiktok.mp4",
-  "foodtiktok.mp4","gamingtiktok.mp4","knittingtiktok.mp4",
-  "partytiktok.mp4","sciencetiktok.mp4","singingtiktok.mp4",
-  "soccertiktok.mp4","technologytiktok.mp4","traveltiktok.mp4"
-];
-
 // Recommendation map
 const recommendationMap = {
-  "earth": { high: ["science", "technology"], moderate: ["travel", "animal"], low: ["art", "knitting"] },
-  "food": { high: ["travel", "party"], moderate: ["science", "technology"], low: ["knitting", "art"] },
-  "soccer": { high: ["basketball", "boxing"], moderate: ["boxing", "driving"], low: ["travel", "earth"] },
-  "travel": { high: ["food", "singing"], moderate: ["earth", "animal"], low: ["science", "technology"] },
-  "knitting": { high: ["art", "technology"], moderate: ["food", "travel"], low: ["singing", "knitting"] },
-  "science": { high: ["technology", "earth"], moderate: ["animal", "food"], low: ["soccer", "basketball"] },
-  "basketball": { high: ["soccer", "boxing"], moderate: ["boxing", "driving"], low: ["knitting", "art"] },
-  "boxing": { high: ["soccer", "basketball"], moderate: ["driving", "soccer"], low: ["travel", "earth"] },
-  "driving": { high: ["boxing", "soccer"], moderate: ["travel", "food"], low: ["technology", "science"] },
-  "animal": { high: ["earth", "science"], moderate: ["travel", "food"], low: ["knitting", "art"] },
-  "technology": { high: ["science", "earth"], moderate: ["art", "knitting"], low: ["driving", "boxing"] },
-  "art": { high: ["knitting", "technology"], moderate: ["food", "travel"], low: ["singing", "art"] },
-  "singing": { high: ["travel", "food"], moderate: ["art", "knitting"], low: ["science", "technology"] },
-  "gaming": { high: ["party", "soccer"], moderate: ["technology", "science"], low: ["driving", "boxing"] },
-  "party": { high: ["gaming", "singing"], moderate: ["food", "travel"], low: ["knitting", "art"] }
+  "Earth":["Food","Science","Travel"],
+  "Food":["Art","Travel","Earth"],
+  "Soccer":["Basketball","Boxing","Driving"],
+  "Travel":["Earth","Food","Art"],
+  "Knitting":["Art","DIY","Crafts"],
+  "Science":["Technology","Earth","Food"],
+  "Basketball":["Soccer","Boxing"],
+  "Boxing":["Soccer","Driving"],
+  "Driving":["Technology","Travel"],
+  "Animal":["Earth","Travel"],
+  "Technology":["Science","Driving"],
+  "Art":["Food","Knitting"],
+  "Singing":["Art","Party"],
+  "Gaming":["Technology"],
+  "Party":["Singing"]
 };
 
-// Engagement tracking
-let engagementMetrics = {};
-let currentVideo;
+// Video library
+const videos = [
+  {src:"../videos/earthtiktok.mp4", category:"Earth"},
+  {src:"../videos/foodtiktok.mp4", category:"Food"},
+  {src:"../videos/sciencetiktok.mp4", category:"Science"},
+  {src:"../videos/arttiktok.mp4", category:"Art"}
+];
 
-const videoEl = document.getElementById("mainVideo");
-const likeBtn = document.getElementById("likeBtn");
-const bookmarkBtn = document.getElementById("bookmarkBtn");
-const overlay = document.getElementById("overlay"); // Opaque feed can ignore this if not needed
+// Pick random starting video
+function pickRandomVideo(){return videos[Math.floor(Math.random()*videos.length)];}
 
-// Load video
-function loadVideo(videoName){
-  currentVideo = videoName;
-  videoEl.src = "../videos/" + videoName;
-  if(!engagementMetrics[videoName]) engagementMetrics[videoName] = { liked:false, favorited:false, watchedPercent:0 };
-  likeBtn.classList.toggle("active", engagementMetrics[videoName].liked);
-  bookmarkBtn.classList.toggle("active", engagementMetrics[videoName].favorited);
-  updateOverlay(videoName);
-  videoEl.scrollIntoView({behavior: "smooth"});
+// Create video card
+function createVideoCard(videoObj){
+  const card=document.createElement("div"); card.className="video-card";
+
+  const vid=document.createElement("video");
+  vid.src=videoObj.src; vid.controls=false; vid.autoplay=true; vid.loop=false;
+
+  let counted25=false;
+  vid.addEventListener("timeupdate",()=>{
+    if(!counted25 && vid.duration>0 && vid.currentTime/vid.duration>=0.25){
+      console.log("Moderate engagement:",videoObj.category); counted25=true;
+    }
+  });
+
+  const actions=document.createElement("div"); actions.className="actions";
+
+  const likeBtn=document.createElement("div"); likeBtn.className="action-btn"; likeBtn.innerHTML="❤";
+  likeBtn.onclick=()=>{likeBtn.classList.toggle("liked");};
+
+  const favBtn=document.createElement("div"); favBtn.className="action-btn"; favBtn.innerHTML="★";
+  favBtn.onclick=()=>{favBtn.classList.toggle("favorited");};
+
+  const favText=document.createElement("div"); favText.className="favorite-label"; favText.textContent="Favorite";
+
+  actions.appendChild(likeBtn); actions.appendChild(favBtn); actions.appendChild(favText);
+  card.appendChild(vid); card.appendChild(actions);
+
+  return card;
 }
 
-// Like button
-likeBtn.addEventListener("click", ()=>{
-  engagementMetrics[currentVideo].liked = !engagementMetrics[currentVideo].liked;
-  likeBtn.classList.toggle("active");
-  updateOverlay(currentVideo);
-});
-
-// Bookmark button
-bookmarkBtn.addEventListener("click", ()=>{
-  engagementMetrics[currentVideo].favorited = !engagementMetrics[currentVideo].favorited;
-  bookmarkBtn.classList.toggle("active");
-  updateOverlay(currentVideo);
-});
-
-// Track watched percent
-videoEl.addEventListener("timeupdate", ()=>{
-  engagementMetrics[currentVideo].watchedPercent = (videoEl.currentTime / videoEl.duration) * 100;
-  updateOverlay(currentVideo);
-});
-
-// Scroll detection for next video
-window.addEventListener("scroll", ()=>{
-  const rect = videoEl.getBoundingClientRect();
-  if(rect.bottom < window.innerHeight/2){
-    const engagement = getEngagementLevel(engagementMetrics[currentVideo]);
-    const nextVideo = getNextVideo(currentVideo, engagement);
-    loadVideo(nextVideo);
-    videoEl.play();
-  }
-});
-
-// Determine engagement level
-function getEngagementLevel(metrics){
-  if(metrics.favorited || metrics.watchedPercent>75) return "high";
-  if(metrics.liked || metrics.watchedPercent>25) return "moderate";
-  return "low";
+// Load next video
+function loadNext(category){
+  const options=recommendationMap[category]||[];
+  const nextCat=options[Math.floor(Math.random()*options.length)];
+  return videos.find(v=>v.category===nextCat)||videos[0];
 }
 
-// Pick next video
-function getNextVideo(currentVideo, engagementLevel){
-  const baseName = currentVideo.replace("tiktok.mp4","");
-  const nextCategories = recommendationMap[baseName][engagementLevel];
-  for(let cat of nextCategories){
-    const nextVid = tiktokVideos.find(v=>v.includes(cat));
-    if(nextVid) return nextVid;
-  }
-  // fallback random
-  return tiktokVideos[Math.floor(Math.random()*tiktokVideos.length)];
+// Initialize feed
+function initFeed(){
+  const feed=document.getElementById("feedContainer");
+  let current=pickRandomVideo();
+  feed.appendChild(createVideoCard(current));
+
+  window.addEventListener("scroll",()=>{
+    if(window.innerHeight+window.scrollY>=document.body.offsetHeight-200){
+      const nextVideo=loadNext(current.category);
+      feed.appendChild(createVideoCard(nextVideo));
+      current=nextVideo;
+    }
+  });
 }
 
-// Overlay for partial/full feeds
-function updateOverlay(videoName){
-  if(!overlay) return; // skip for opaque feed
-  const metrics = engagementMetrics[videoName];
-  const engagementLevel = getEngagementLevel(metrics);
-  const reasons = [];
-  if(metrics.favorited) reasons.push("Bookmarked");
-  if(metrics.liked) reasons.push("Liked");
-  if(metrics.watchedPercent>0) reasons.push(`Watched ${metrics.watchedPercent.toFixed(0)}%`);
-  overlay.textContent = `Recommendation Details:
-Video: ${videoName}
-Previous Activity: ${reasons.length?reasons.join(", "):"None"}
-Engagement Level: ${engagementLevel}`;
-}
-
-// Load initial video randomly
-loadVideo(tiktokVideos[Math.floor(Math.random()*tiktokVideos.length)]);
+initFeed();
