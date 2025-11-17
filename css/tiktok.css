@@ -1,88 +1,60 @@
-* {
+/* Full viewport for TikTok-style video feed */
+body, html {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-body {
+  overflow-x: hidden;
+  height: 100%;
   font-family: Arial, sans-serif;
   background-color: #000;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-
-  /* Scroll snapping */
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  height: 100vh;
 }
 
 .video-container {
-  width: 360px;
-  height: 640px; /* 9:16 */
   position: relative;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
-  border-radius: 10px;
-  background-color: #000;
-
-  /* Snap each video */
-  scroll-snap-align: start;
 }
 
-.video-container video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+video#mainVideo {
+  width: 100%;
   height: 100%;
-  width: auto;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
+  object-fit: cover; /* Crops to fill 9:16 vertically */
 }
 
+/* Side icons */
 .side-icons {
   position: absolute;
-  right: 10px;
-  bottom: 80px;
+  right: 15px;
+  bottom: 100px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  z-index: 10;
 }
 
 .side-icons div {
-  width: 50px;
-  height: 50px;
-  background-color: rgba(255,255,255,0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer;
-  font-size: 24px;
+  font-size: 32px;
   color: #fff;
-  transition: transform 0.2s, background-color 0.2s;
+  transition: transform 0.2s;
 }
 
 .side-icons div:hover {
   transform: scale(1.2);
 }
 
-/* Like button active color */
-.side-icons .like.active {
-  color: #ff0050;
+/* Bookmark button styles */
+.side-icons .bookmark.active {
+  color: #FFD700;
 }
 
-/* Bookmark active color */
-.side-icons .favorite.active {
-  color: #ffd700;
-}
-
+/* Video info at bottom left */
 .video-info {
   position: absolute;
-  left: 10px;
-  bottom: 10px;
-  max-width: 70%;
+  left: 15px;
+  bottom: 50px;
+  color: #fff;
+  z-index: 10;
 }
 
 .video-info .username {
@@ -95,11 +67,21 @@ body {
 }
 
 .video-info .music {
-  font-size: 14px;
-  color: #ccc;
+  display: flex;
+  align-items: center;
 }
 
-/* Hide scrollbar */
-body::-webkit-scrollbar {
-  display: none;
+/* Overlay for recommendation info */
+.recommendation-overlay {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  max-width: 80%;
+  z-index: 10;
+  white-space: pre-line;
 }
