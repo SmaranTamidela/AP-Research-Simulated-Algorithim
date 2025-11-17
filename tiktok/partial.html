@@ -1,16 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Partial Transparency</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Partial Feed</title>
   <link rel="stylesheet" href="../css/tiktok.css">
 </head>
 <body>
-  <div class="app-container">
-    <div id="feedContainer" class="feed"></div>
-  </div>
+  <div class="feed-container" id="feed"></div>
 
   <script src="../js/tiktokPartial.js"></script>
+  <script>
+    const recommendationMap = { /* same as opaque */ };
+    const videos = [ /* same as opaque */ ];
+
+    const feedContainer = document.getElementById('feed');
+
+    function generateFeedPartial(startIndex=0, count=10) {
+      let currentIndex = startIndex;
+      for (let i=0; i<count; i++) {
+        const videoData = videos[currentIndex];
+
+        const card = document.createElement('div');
+        card.className = 'video-card';
+
+        const videoEl = document.createElement('video');
+        videoEl.src = videoData.src;
+        videoEl.className = 'video';
+        videoEl.muted = true;
+        videoEl.loop = true;
+        videoEl.autoplay = true;
+        card.appendChild(videoEl);
+
+        const titleEl = document.createElement('div');
+        titleEl.className = 'video-title';
+        titleEl.innerText = i === 0 ? 'this video' : 'previous video';
+        card.appendChild(titleEl);
+
+        feedContainer.appendChild(card);
+
+        // Partial algorithm: pick randomly from high + moderate
+        const category = videoData.category;
+        const options = [...recommendationMap[category].high, ...recommendationMap[category].moderate];
+        const nextCategory = options[Math.floor(Math.random() * options.length)];
+        const nextIndex = videos.findIndex(v => v.category === nextCategory);
+        currentIndex = nextIndex !== -1 ? nextIndex : Math.floor(Math.random() * videos.length);
+      }
+    }
+
+    generateFeedPartial();
+
+    // Autoplay/pause
+    const videoCards = document.querySelectorAll('.video-card');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const video = entry.target.querySelector('video');
+        if (entry.isIntersecting) video.play();
+        else video.pause();
+      });
+    }, { threshold: 0.75 });
+
+    videoCards.forEach(card => observer.observe(card));
+  </script>
 </body>
 </html>
