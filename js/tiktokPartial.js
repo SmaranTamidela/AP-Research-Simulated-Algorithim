@@ -120,5 +120,5 @@ function initPartialFeed(){
   });
 }
 
-initPartialFeed(); 
+initPartialFeed();  
  
