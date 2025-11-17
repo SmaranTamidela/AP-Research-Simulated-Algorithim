@@ -1,4 +1,4 @@
-// List of videos
+// Video list
 const tiktokVideos = [
   "animaltiktok.mp4",
   "arttiktok.mp4",
@@ -36,20 +36,62 @@ const recommendationMap = {
   party: { high: ["gaming", "singing"], moderate: ["food", "travel"], low: ["knitting", "art"] }
 };
 
-// Pick random video to start
-function getRandomVideo() {
-  return tiktokVideos[Math.floor(Math.random() * tiktokVideos.length)];
-}
+// Track engagement metrics
+let engagementMetrics = {}; // { videoName: {liked: bool, favorited: bool, watchedPercent: number} }
 
-// Determine engagement
-function getEngagementLevel(videoElement) {
-  const watchedPercent = (videoElement.currentTime / videoElement.duration) * 100;
-  if (watchedPercent > 75 || favorited) return "high";
-  if (watchedPercent > 25 || liked) return "moderate";
+// Select all video containers
+const videoContainers = document.querySelectorAll(".video-container");
+
+videoContainers.forEach((container, index) => {
+  const videoEl = container.querySelector("video");
+  const likeBtn = container.querySelector(".like");
+  const favBtn = container.querySelector(".favorite");
+
+  // Assign a random starting video
+  let currentVideo = tiktokVideos[Math.floor(Math.random() * tiktokVideos.length)];
+  videoEl.src = "../videos/" + currentVideo;
+
+  // Initialize metrics
+  engagementMetrics[currentVideo] = { liked: false, favorited: false, watchedPercent: 0 };
+
+  // Button event listeners
+  likeBtn.addEventListener("click", () => {
+    engagementMetrics[currentVideo].liked = !engagementMetrics[currentVideo].liked;
+    likeBtn.classList.toggle("active");
+  });
+
+  favBtn.addEventListener("click", () => {
+    engagementMetrics[currentVideo].favorited = !engagementMetrics[currentVideo].favorited;
+    favBtn.classList.toggle("active");
+  });
+
+  // Update watched percent while playing
+  videoEl.addEventListener("timeupdate", () => {
+    engagementMetrics[currentVideo].watchedPercent = (videoEl.currentTime / videoEl.duration) * 100;
+  });
+
+  // Load next video on end
+  videoEl.addEventListener("ended", () => {
+    const engagement = getEngagementLevel(engagementMetrics[currentVideo]);
+    const nextVideo = getNextVideo(currentVideo, engagement);
+    currentVideo = nextVideo;
+    videoEl.src = "../videos/" + nextVideo;
+
+    // Initialize metrics if not present
+    if (!engagementMetrics[nextVideo]) engagementMetrics[nextVideo] = { liked: false, favorited: false, watchedPercent: 0 };
+
+    videoEl.play();
+  });
+});
+
+// Determine engagement level
+function getEngagementLevel(metrics) {
+  if (metrics.favorited || metrics.watchedPercent > 75) return "high";
+  if (metrics.liked || metrics.watchedPercent > 25) return "moderate";
   return "low";
 }
 
-// Get next video
+// Get next video based on engagement
 function getNextVideo(currentVideo, engagementLevel) {
   const baseName = currentVideo.replace("tiktok.mp4", "");
   const nextCategories = recommendationMap[baseName][engagementLevel];
@@ -58,38 +100,7 @@ function getNextVideo(currentVideo, engagementLevel) {
     const nextVid = tiktokVideos.find(v => v.includes(cat));
     if (nextVid) return nextVid;
   }
+  
+  // fallback
   return tiktokVideos[Math.floor(Math.random() * tiktokVideos.length)];
 }
-
-// Grab elements
-const videoContainer = document.querySelector(".video-container video");
-const likeBtn = document.getElementById("like");
-const favoriteBtn = document.getElementById("favorite");
-
-// Track engagement buttons
-let liked = false;
-let favorited = false;
-
-// Toggle buttons
-likeBtn.addEventListener("click", () => {
-  liked = !liked;
-  likeBtn.classList.toggle("active");
-});
-
-favoriteBtn.addEventListener("click", () => {
-  favorited = !favorited;
-  favoriteBtn.classList.toggle("active");
-});
-
-// Load random starting video
-let currentVideo = getRandomVideo();
-videoContainer.src = "../videos/" + currentVideo;
-
-// Play next video on end
-videoContainer.addEventListener("ended", () => {
-  const engagement = getEngagementLevel(videoContainer);
-  const nextVideo = getNextVideo(currentVideo, engagement);
-  currentVideo = nextVideo;
-  videoContainer.src = "../videos/" + nextVideo;
-  videoContainer.play();
-});
