@@ -52,12 +52,27 @@ function chooseNextVideo(currentCategory){
   const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&v.category===bestCategory);return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();
 }
 
-function createVideoCardFull(videoObj){
-  const card=document.createElement("div");card.className="video-card";
-  const vid=document.createElement("video");vid.src=videoObj.src;vid.controls=false;vid.autoplay=true;vid.loop=false;vid.muted=true;
+function createVideoCardFull(videoObj) {
+  const card = document.createElement("div"); 
+  card.className="video-card";
 
-  const metrics=videoMetrics.get(videoObj.src);
-  vid.addEventListener("timeupdate",()=>{if(vid.duration>0){metrics.watchedPercent=Math.min(100,(vid.currentTime/vid.duration)*100);}});
+  // video
+  const vid = document.createElement("video");
+  vid.src = videoObj.src;
+  vid.controls=false;
+  vid.autoplay=true;
+  vid.loop=false;
+  vid.muted=true;
+
+  const metrics = videoMetrics.get(videoObj.src);
+  let counted25=false;
+  vid.addEventListener("timeupdate", () => {
+    if(vid.duration>0) {
+      metrics.watchedPercent = Math.min(100,(vid.currentTime/vid.duration)*100);
+      if(!counted25 && metrics.watchedPercent>=25) { counted25=true; }
+    }
+  });
+
 
   vid.addEventListener("ended",()=>{sessionCategoryScores[videoObj.category]=(sessionCategoryScores[videoObj.category]||0)+scoreFromMetrics(metrics);playedVideos.add(videoObj.src);});
 
