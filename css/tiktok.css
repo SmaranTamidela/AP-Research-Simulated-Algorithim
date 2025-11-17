@@ -1,89 +1,53 @@
-/* Reset */
-* {
+body {
   margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body, html {
-  height: 100%;
-  overflow: hidden;
   font-family: Arial, sans-serif;
-  background-color: black;
+  background: black;
+  color: white;
 }
 
-/* Feed container */
-.feed-container {
+#feed {
   height: 100vh;
-  width: 100%;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
-  -webkit-overflow-scrolling: touch;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-/* Each video card */
-.video-card {
+.video-container {
   height: 100vh;
   width: 100%;
   scroll-snap-align: start;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
-/* 9:16 video */
-.video {
-  width: 45%;       /* Adjust for 9:16 ratio on desktop, tweak for mobile */
-  aspect-ratio: 9 / 16;
+video {
+  height: 100%;
+  width: auto;
   object-fit: cover;
-  border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-/* Video title overlay */
-.video-title {
+.controls {
   position: absolute;
-  bottom: 100px;
-  left: 20px;
-  color: white;
-  font-size: 1.5rem;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-}
-
-/* Right sidebar for buttons */
-.video-actions {
-  position: absolute;
-  right: 15px;
-  bottom: 100px;
+  right: 20px;
+  bottom: 50px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
-  align-items: center;
+  gap: 15px;
 }
 
-.video-actions div {
-  width: 50px;
-  height: 50px;
-  background-color: rgba(0,0,0,0.5);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 1.2rem;
+button {
+  background: none;
+  border: none;
   cursor: pointer;
-  transition: transform 0.2s;
+  font-size: 24px;
+  color: white;
 }
 
-.video-actions div:hover {
-  transform: scale(1.2);
+button.liked {
+  color: red;
 }
 
-/* Smooth scroll */
-.feed-container {
-  scroll-behavior: smooth;
+button.favorited {
+  color: yellow;
 }
