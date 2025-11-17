@@ -1,74 +1,98 @@
-/* Body setup */
+/* Body */
 body {
   margin: 0;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  background-color: #f0f0f0; /* feed background */
-  scroll-behavior: smooth;
-  scroll-snap-type: y mandatory; /* snap vertically */
+  padding: 0;
+  background: #000;
+  font-family: Arial, sans-serif;
+  overflow-y: scroll;
 }
 
-/* Video container: fixed 9:16 ratio, centered */
-.video-container {
-  width: 320px;      /* width of video box */
-  height: 568px;     /* 9:16 aspect ratio */
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  margin: 20px auto; /* center horizontally */
+/* Feed container */
+.app-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+/* Feed stack */
+.feed {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Video card */
+.video-card {
   position: relative;
-  background-color: black;
-  scroll-snap-align: start;
+  width: 100%;
+  height: 640px; /* 9:16 */
+  background: #111;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
 }
 
 /* Video inside container */
-.video-container video {
+.video-card video {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* crops video to fill container */
-  display: block;
+  object-fit: cover;
 }
 
-/* Controls (like/bookmark buttons) */
-#controls {
+/* Engagement actions */
+.actions {
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  right: 14px;
+  bottom: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
-button {
-  width: 50px;
-  height: 50px;
-  border: none;
-  border-radius: 50%;
-  background-color: rgba(255,255,255,0.7);
-  cursor: pointer;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-button.active {
-  background-color: gold; /* for bookmarked/liked */
-}
-
-/* Overlay for engagement hints */
-#overlay {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: rgba(0,0,0,0.5);
+/* Action buttons */
+.action-btn {
+  font-size: 32px;
   color: white;
-  padding: 5px;
-  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s;
+}
+
+.action-btn:hover {
+  transform: scale(1.2);
+}
+
+/* Heart button when liked */
+.liked {
+  color: red !important;
+}
+
+/* Star button when favorited */
+.favorited {
+  color: gold !important;
+}
+
+/* Favorite label */
+.favorite-label {
+  font-size: 13px;
+  color: white;
+  text-align: center;
+  margin-top: -8px;
+}
+
+/* Explanation box for partial/full feeds */
+.explanation-box {
+  position: absolute;
+  right: 80px;
+  bottom: 20px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  max-width: 180px;
   font-size: 12px;
-  max-width: 90%;
+  line-height: 1.3;
   word-wrap: break-word;
 }
