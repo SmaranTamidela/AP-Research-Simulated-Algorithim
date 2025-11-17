@@ -111,14 +111,18 @@ function createVideoCardPartial(videoObj) {
   card.appendChild(vid); card.appendChild(actions); card.appendChild(expBox);
 
   // update box live
-  function updateBox() {
-    const m = videoMetrics.get(videoObj.src);
-    const hints = [];
-    if (m.favorited) hints.push("You favorited similar content");
-    if (m.liked) hints.push("You liked similar content");
-    if (m.watchedPercent > 25) hints.push("You often watch this type of video");
-    expBox.textContent = hints.length ? hints[0] : "Recommended based on your session activity";
-  }
+function updateBox() {
+  const m = videoMetrics.get(videoObj.src);
+  const hints = [];
+
+  if (m.favorited) hints.push("You have favorited videos similar to this one");
+  if (m.liked) hints.push("You have liked videos similar to this one");
+  if (m.watchedPercent > 25) hints.push("You tend to watch videos of this type");
+
+  // if no hints, give a generic recommendation
+  expBox.textContent = hints.length ? hints[0] : "Recommended based on your session activity";
+}
+
   function updatePartialExpBox(cardRef, vObj){ updateBox(); }
 
   // ensure the expBox updates over time
