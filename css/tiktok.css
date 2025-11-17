@@ -4,18 +4,21 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
+html, body {
+  height: 100%;
+  width: 100%;
   background-color: #000;
-  color: #fff;
   overflow-y: scroll;
-  height: 100vh;
   scroll-snap-type: y mandatory;
 }
 
+body {
+  font-family: Arial, sans-serif;
+}
+
 .video-container {
-  width: 100vw;      /* full viewport width */
-  height: 100vh;     /* full viewport height */
+  width: 100vw;
+  height: 100vh; /* full viewport height */
   position: relative;
   overflow: hidden;
   scroll-snap-align: start;
@@ -61,11 +64,11 @@ body {
 }
 
 .side-icons .like.active {
-  color: #ff0050; /* like button active */
+  color: #ff0050;
 }
 
 .side-icons .favorite.active {
-  color: yellow;  /* bookmark/favorite button active */
+  color: yellow;
 }
 
 .video-info {
@@ -101,7 +104,7 @@ body {
   font-size: 14px;
   max-width: 80%;
   z-index: 10;
-  white-space: pre-line; /* preserve line breaks */
+  white-space: pre-line;
 }
 
 body::-webkit-scrollbar {
