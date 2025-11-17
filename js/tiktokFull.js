@@ -115,6 +115,6 @@ function initFullFeed(){
       current=next;
     }
   });
-}
+} 
 
 initFullFeed();
