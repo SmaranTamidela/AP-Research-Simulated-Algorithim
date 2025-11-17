@@ -1,1 +1,25 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Video Feed</title> <link rel="stylesheet" href="../css/tiktok.css"> </head> <body> <h1>Video Feed</h1> <!-- Video 1 --> <div class="video-container"> <video controls></video> <div class="side-icons"> <div class="like">❤</div> <div class="favorite">⭐</div> </div> <div class="video-info"> <div class="username">@user1</div> <div class="caption">Caption 1</div> <div class="music">🎵 Music 1</div> </div> </div> <!-- Video 2 --> <div class="video-container"> <video controls></video> <div class="side-icons"> <div class="like">❤</div> <div class="favorite">⭐</div> </div> <div class="video-info"> <div class="username">@user2</div> <div class="caption">Caption 2</div> <div class="music">🎵 Music 2</div> </div> </div> <!-- Video 3 --> <div class="video-container"> <video controls></video> <div class="side-icons"> <div class="like">❤</div> <div class="favorite">⭐</div> </div> <div class="video-info"> <div class="username">@user3</div> <div class="caption">Caption 3</div> <div class="music">🎵 Music 3</div> </div> </div> <script src="../js/tiktokAlgorithm.js"></script> </body> </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opaque Feed</title>
+  <link rel="stylesheet" href="../css/tiktok.css">
+</head>
+<body>
+  <div class="video-container">
+    <video controls id="mainVideo"></video>
+    <div class="side-icons">
+      <div class="like" id="likeBtn">❤</div>
+      <div class="bookmark" id="bookmarkBtn">🔖</div>
+    </div>
+    <div class="video-info">
+      <div class="username" id="username">@user</div>
+      <div class="caption" id="caption">Caption goes here</div>
+      <div class="music" id="music">🎵 Music goes here</div>
+    </div>
+  </div>
+
+  <script src="../js/tiktokAlgorithm.js"></script>
+</body>
+</html>
