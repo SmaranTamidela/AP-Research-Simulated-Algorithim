@@ -65,7 +65,7 @@ function createVideoCard(videoObj){
     playedVideos.add(videoObj.src);
 
     // Send engagement data to Google Sheets
-    fetch("YOUR_WEB_APP_URL_HERE", {
+    fetch("https://script.google.com/macros/s/AKfycbyk-N5IYXb3MaL9acw6dKzxsXJcUGsvTTI3thomRTU/dev", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
