@@ -49,6 +49,7 @@ function generateFeed(mode = "opaque", startIndex = 0, count = 10) {
     const card = document.createElement('div');
     card.className = 'video-card';
 
+    // Video element
     const videoEl = document.createElement('video');
     videoEl.src = videoData.src;
     videoEl.className = 'video';
@@ -57,10 +58,26 @@ function generateFeed(mode = "opaque", startIndex = 0, count = 10) {
     videoEl.autoplay = true;
     card.appendChild(videoEl);
 
+    // Video title
     const titleEl = document.createElement('div');
     titleEl.className = 'video-title';
     titleEl.innerText = i === 0 ? 'this video' : 'previous video';
     card.appendChild(titleEl);
+
+    // Right sidebar buttons
+    const actions = document.createElement('div');
+    actions.className = 'video-actions';
+    const like = document.createElement('div');
+    like.innerText = '❤️';
+    const comment = document.createElement('div');
+    comment.innerText = '💬';
+    const share = document.createElement('div');
+    share.innerText = '🔗';
+    actions.appendChild(like);
+    actions.appendChild(comment);
+    actions.appendChild(share);
+
+    card.appendChild(actions);
 
     feedContainer.appendChild(card);
 
