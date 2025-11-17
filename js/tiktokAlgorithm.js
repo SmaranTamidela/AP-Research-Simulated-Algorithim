@@ -1,19 +1,8 @@
 const videos = [
-  "videos/animaltiktok.mp4",
-  "videos/arttiktok.mp4",
-  "videos/basketballtiktok.mp4",
-  "videos/boxingtiktok.mp4",
-  "videos/drivingtiktok.mp4",
-  "videos/earthtiktok.mp4",
-  "videos/foodtiktok.mp4",
-  "videos/gamingtiktok.mp4",
-  "videos/knittingtiktok.mp4",
-  "videos/partytiktok.mp4",
-  "videos/sciencetiktok.mp4",
-  "videos/singingtiktok.mp4",
-  "videos/soccertiktok.mp4",
-  "videos/technologytiktok.mp4",
-  "videos/traveltiktok.mp4"
+  "videos/animaltiktok.mp4","videos/arttiktok.mp4","videos/basketballtiktok.mp4","videos/boxingtiktok.mp4",
+  "videos/drivingtiktok.mp4","videos/earthtiktok.mp4","videos/foodtiktok.mp4","videos/gamingtiktok.mp4",
+  "videos/knittingtiktok.mp4","videos/partytiktok.mp4","videos/sciencetiktok.mp4","videos/singingtiktok.mp4",
+  "videos/soccertiktok.mp4","videos/technologytiktok.mp4","videos/traveltiktok.mp4"
 ];
 
 const recMap = {
@@ -37,13 +26,11 @@ const recMap = {
 const feed = document.getElementById("feed");
 let loading = false;
 
-// Add initial random video
 function addInitialVideo() {
-  const first = videos[Math.floor(Math.random() * videos.length)];
+  const first = videos[Math.floor(Math.random()*videos.length)];
   addVideoToFeed(first);
 }
 
-// Add video element with buttons
 function addVideoToFeed(src) {
   const container = document.createElement("div");
   container.className = "video-container";
@@ -73,7 +60,6 @@ function addVideoToFeed(src) {
   feed.appendChild(container);
 }
 
-// Engagement: watched percentage
 function getEngagement(videoEl) {
   const watched = videoEl.currentTime / videoEl.duration;
   if (watched >= 0.75) return "high";
@@ -81,15 +67,13 @@ function getEngagement(videoEl) {
   return "low";
 }
 
-// Next video based on last video
 function getNextVideo(prevVideoEl) {
   const level = getEngagement(prevVideoEl);
   const prevSrc = prevVideoEl.src.split("/").pop();
   const options = recMap[prevSrc][level];
-  return options[Math.floor(Math.random() * options.length)];
+  return options[Math.floor(Math.random()*options.length)];
 }
 
-// Scroll listener
 feed.addEventListener("scroll", () => {
   const scrollBottom = feed.scrollTop + feed.clientHeight;
   if (!loading && scrollBottom >= feed.scrollHeight - 5) {
