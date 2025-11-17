@@ -111,17 +111,29 @@ function createVideoCardFull(videoObj) {
   const expBox = document.createElement("div"); expBox.className="explanation-box";
   card.appendChild(vid); card.appendChild(actions); card.appendChild(expBox);
 
-  function updateFullExp(cardRef, vObj) {
-    const m = videoMetrics.get(vObj.src);
-    const engagementLevel = (m.favorited || m.watchedPercent>75) ? "High" : (m.liked || m.watchedPercent>25) ? "Moderate" : "Low";
-    // Show session top categories
-    const sorted = Object.entries(sessionCategoryScores).slice().sort((a,b)=>b[1]-a[1]).slice(0,4);
-    const sessionTop = sorted.map(s => `${s[0]} (${s[1].toFixed(2)})`).join(", ") || "None";
-    const recsObj = recommendationMap[vObj.category] || {};
-    const recs = [];
-    ["high","moderate","low"].forEach(l => { if(Array.isArray(recsObj[l])) recsObj[l].forEach(c=>recs.push(c)); });
-    expBox.textContent = `Video: ${vObj.category}\nEngagement: ${engagementLevel}\nSession top: ${sessionTop}\nCandidate recs: ${recs.join(", ")}`;
-  }
+function updateFullExp(cardRef, vObj) {
+  const m = videoMetrics.get(vObj.src);
+
+  // determine engagement level
+  const engagementLevel = (m.favorited || m.watchedPercent > 75) ? "High"
+                        : (m.liked || m.watchedPercent > 25) ? "Moderate" : "Low";
+
+  // find categories with high session engagement
+  const topCategories = Object.entries(sessionCategoryScores)
+                              .sort((a,b) => b[1]-a[1])
+                              .slice(0, 2)
+                              .map(s => s[0]);
+
+  // reason text based on metrics
+  let reasonText = "";
+  if (m.favorited) reasonText += "You favorited videos similar to this one. ";
+  if (m.liked) reasonText += "You liked videos similar to this one. ";
+  if (topCategories.includes(vObj.category)) reasonText += `This video is in a category you've shown high engagement in (${vObj.category}).`;
+  if (!reasonText) reasonText = `This video was recommended based on your session activity.`;
+
+  expBox.textContent = `Video: ${vObj.category}\nEngagement: ${engagementLevel}\nReason: ${reasonText}`;
+}
+
 
   // update live while playing
   vid.addEventListener("timeupdate", () => updateFullExp(card, videoObj));
