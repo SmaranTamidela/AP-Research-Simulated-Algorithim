@@ -1,6 +1,6 @@
 // js/tiktokFull.js (session-based, full explanation shown)
 
-// ---------- Recommendation map ----------
+// ---------- Recommendation map ---------- 
 const recommendationMap = {
   "earth": { high: ["science","technology"], moderate: ["travel","animal"], low: ["art","knitting"] },
   "food":  { high: ["travel","party"], moderate: ["science","technology"], low: ["knitting","art"] },
