@@ -85,6 +85,7 @@ function createVideoCard(videoObj) {
   vid.autoplay = true;
   vid.loop = false;
   vid.controls = false;
+vid.muted = true;
 
   const metrics = videoMetrics.get(videoObj.src);
   vid.addEventListener("timeupdate", () => {
