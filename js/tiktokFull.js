@@ -93,14 +93,13 @@ card.appendChild(captionBox);
   const expBox=document.createElement("div");expBox.className="explanation-box";
 
   function updateExp(){
-    let topCats=Object.entries(sessionCategoryScores).sort((a,b)=>b[1]-a[1]).slice(0,2);
-    const messages=topCats.map(c=>{
-      const pct=Math.round(c[1]*10); 
-      if(metrics.favorited) return `This video was recommended to you because you have favorited videos related to ${c[0]} (${pct}%)`;
-      if(metrics.liked) return `This video was recommended to you because you have liked videos related to ${c[0]} (${pct}%)`;
-      return `This video was recommended to you because you have watched videos related to ${c[0]} (${pct}%)`;
-    });
-    expBox.textContent=messages.join("\n");
+
+  let topCats = Object.entries(sessionCategoryScores).sort((a,b)=>b[1]-a[1]).slice(0,2);
+  const messages = topCats.map(c=>{
+    if(metrics.favorited || metrics.liked) return `You have favorited or liked videos related to ${c[0]}`;
+    return `You have watched videos related to ${c[0]}`;
+  });
+  expBox.textContent = messages.join("\n");
   }
 
   card.appendChild(vid);card.appendChild(actions);card.appendChild(expBox);card.appendChild(captionBox);
