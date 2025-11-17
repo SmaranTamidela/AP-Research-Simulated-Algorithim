@@ -1,4 +1,4 @@
-const tiktokVideos = [
+  const tiktokVideos = [
   "animaltiktok.mp4","arttiktok.mp4","basketballtiktok.mp4",
   "boxingtiktok.mp4","drivingtiktok.mp4","earthtiktok.mp4",
   "foodtiktok.mp4","gamingtiktok.mp4","knittingtiktok.mp4",
