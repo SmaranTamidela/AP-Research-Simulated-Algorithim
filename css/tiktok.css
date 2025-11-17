@@ -1,90 +1,56 @@
-/* css/tiktok.css */
-body {
+/* Reset */
+* {
   margin: 0;
   padding: 0;
-  background: #000;
-  font-family: Arial, sans-serif;
-  overflow-y: auto;
+  box-sizing: border-box;
 }
 
-.app-container {
+body, html {
+  height: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background-color: black;
+}
+
+/* Feed container */
+.feed-container {
+  height: 100vh;
   width: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Each video card fills the screen */
+.video-card {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  scroll-snap-align: start;
   display: flex;
   justify-content: center;
-  padding: 20px 0;
+  align-items: center;
 }
 
-.feed {
-  width: 360px;               /* 9:16 "phone" look */
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-}
-
-/* 9:16 card */
-.video-card {
-  position: relative;
-  width: 100%;
-  height: 640px;             /* 9:16 container */
-  background: #111;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-/* video fills container, cropped */
-.video-card video {
-  width: 100%;
+/* Video element styling */
+.video {
   height: 100%;
+  width: auto;
+  max-width: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* actions on right bottom */
-.actions {
+/* Video title overlay */
+.video-title {
   position: absolute;
-  right: 14px;
-  bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  z-index: 10;
-}
-
-.action-btn {
-  font-size: 30px;
+  bottom: 40px;
+  left: 20px;
   color: white;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.14s;
-}
-.action-btn:hover { transform: scale(1.15); }
-
-/* heart when liked */
-.liked { color: red !important; }
-
-/* star when favorited */
-.favorited { color: gold !important; }
-
-/* label under star */
-.favorite-label {
-  font-size: 12px;
-  color: white;
-  text-align: center;
-  margin-top: -6px;
+  font-size: 1.5rem;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
-/* explanation box on the right (for partial/full) */
-.explanation-box {
-  position: absolute;
-  right: 80px;              /* box on the right but not overlapping icons */
-  bottom: 20px;
-  background: rgba(0,0,0,0.62);
-  color: #fff;
-  padding: 8px 10px;
-  border-radius: 8px;
-  max-width: 185px;
-  font-size: 12px;
-  line-height: 1.25;
-  z-index: 10;
-  white-space: pre-wrap;
+/* Smooth scroll behavior */
+.feed-container {
+  scroll-behavior: smooth;
 }
