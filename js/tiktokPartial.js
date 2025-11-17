@@ -1,4 +1,4 @@
-// js/tiktokPartial.js (partial transparency)
+// js/tiktokPartial.js  (PARTIAL TRANSPARENCY)
 
 // ---------- Recommendation Map ----------
 const recommendationMap = {
@@ -19,87 +19,142 @@ const recommendationMap = {
   "party":{high:["gaming","singing"], moderate:["food","travel"], low:["knitting","art"] }
 };
 
-// ---------- Video List ----------
-const videos = [
-  { src: "../videos/animaltiktok.mp4", category: "animal", username: "@naturelover", caption: "Check out this cute animal!" },
-  { src: "../videos/arttiktok.mp4", category: "art", username: "@artsy", caption: "Amazing art piece!" },
-  { src: "../videos/basketballtiktok.mp4", category: "basketball", username: "@baller23", caption: "Epic dunk!" },
-  { src: "../videos/boxingtiktok.mp4", category: "boxing", username: "@punchking", caption: "Knockout moves!" },
-  { src: "../videos/drivingtiktok.mp4", category: "driving", username: "@fastlane", caption: "Crazy road trip!" },
-  { src: "../videos/earthtiktok.mp4", category: "earth", username: "@earthwatch", caption: "Breathtaking nature!" },
-  { src: "../videos/foodtiktok.mp4", category: "food", username: "@foodie", caption: "Yummy recipes!" },
-  { src: "../videos/gamingtiktok.mp4", category: "gaming", username: "@gamerlife", caption: "Insane gameplay!" },
-  { src: "../videos/knittingtiktok.mp4", category: "knitting", username: "@craftqueen", caption: "DIY knitting tutorial!" },
-  { src: "../videos/partytiktok.mp4", category: "party", username: "@funvibes", caption: "Weekend party vibes!" },
-  { src: "../videos/sciencetiktok.mp4", category: "science", username: "@labnerd", caption: "Cool science experiment!" },
-  { src: "../videos/singingtiktok.mp4", category: "singing", username: "@musiclover", caption: "Cover song performance!" },
-  { src: "../videos/soccertiktok.mp4", category: "soccer", username: "@footie", caption: "Goal of the season!" },
-  { src: "../videos/technologytiktok.mp4", category: "technology", username: "@techguru", caption: "Latest gadgets review!" },
-  { src: "../videos/traveltiktok.mp4", category: "travel", username: "@wanderlust", caption: "Amazing travel spots!" }
+// ---------- Video Library ----------
+const partialVideos = [
+  { src: "../videos/animaltiktok.mp4", category: "animal", username: "wildlifeFan", caption: "A small wildlife moment today 🐾" },
+  { src: "../videos/arttiktok.mp4", category: "art", username: "artsyJane", caption: "Trying a new painting style 🎨" },
+  { src: "../videos/basketballtiktok.mp4", category: "basketball", username: "hoopDreamer", caption: "Trying new drills" },
+  { src: "../videos/boxingtiktok.mp4", category: "boxing", username: "fightNight", caption: "Training my jab 🥊" },
+  { src: "../videos/drivingtiktok.mp4", category: "driving", username: "roadRider", caption: "A calm night drive" },
+  { src: "../videos/earthtiktok.mp4", category: "earth", username: "naturelover", caption: "The world is wild 🌍" },
+  { src: "../videos/foodtiktok.mp4", category: "food", username: "chefLife", caption: "Tasting new recipes today" },
+  { src: "../videos/gamingtiktok.mp4", category: "gaming", username: "gamerGuy", caption: "Trying to beat this level 🎮" },
+  { src: "../videos/knittingtiktok.mp4", category: "knitting", username: "knitQueen", caption: "Working on a soft scarf" },
+  { src: "../videos/partytiktok.mp4", category: "party", username: "partyAnimal", caption: "Last night was fun 🎉" },
+  { src: "../videos/sciencetiktok.mp4", category: "science", username: "scienceGeek", caption: "New experiment results" },
+  { src: "../videos/singingtiktok.mp4", category: "singing", username: "vocalStar", caption: "Singing warm-ups 🎤" },
+  { src: "../videos/soccertiktok.mp4", category: "soccer", username: "footieFan", caption: "Goal practice today ⚽" },
+  { src: "../videos/technologytiktok.mp4", category: "technology", username: "techGuru", caption: "Trying out this gadget" },
+  { src: "../videos/traveltiktok.mp4", category: "travel", username: "globeTrotter", caption: "Another beautiful place ✈️" }
 ];
 
-// ---------- Session ----------
-const sessionCategoryScores = {};
-const playedVideos = new Set();
-const videoMetrics = new Map();
-videos.forEach(v => { sessionCategoryScores[v.category] = 0; videoMetrics.set(v.src, { watchedPercent:0, liked:false, favorited:false }); });
+// ---------- State ----------
+const partialMetrics = new Map();
+const partialCatScores = {};
+const partialPlayed = new Set();
+
+partialVideos.forEach(v => {
+  partialCatScores[v.category] = 0;
+  partialMetrics.set(v.src, { watchedPercent: 0, liked: false, favorited: false });
+});
 
 // ---------- Helpers ----------
-function randomUnplayedVideoPartial() {
-  const unplayed = videos.filter(v=>!playedVideos.has(v.src));
-  if(unplayed.length===0){ playedVideos.clear(); return videos[Math.floor(Math.random()*videos.length)]; }
-  return unplayed[Math.floor(Math.random()*unplayed.length)];
+function partialRandom() {
+  const left = partialVideos.filter(v => !partialPlayed.has(v.src));
+  if (!left.length) {
+    partialPlayed.clear();
+    return partialVideos[Math.floor(Math.random() * partialVideos.length)];
+  }
+  return left[Math.floor(Math.random() * left.length)];
 }
 
-function scoreFromMetrics(metrics) { return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
-
-function chooseNextVideoPartial(currentCategory){
-  if(!recommendationMap[currentCategory]) return randomUnplayedVideoPartial();
-  const candidateCats=[].concat(...Object.values(recommendationMap[currentCategory]));
-  const unplayed = videos.filter(v=>!playedVideos.has(v.src)&&candidateCats.includes(v.category));
-  return unplayed.length ? unplayed[Math.floor(Math.random()*unplayed.length)] : randomUnplayedVideoPartial();
+function partialScore(m) {
+  return (m.favorited ? 2 : 0) + (m.liked ? 1 : 0) + (m.watchedPercent / 100);
 }
 
-// ---------- DOM ----------
-function createVideoCardPartial(videoObj){
-  const card=document.createElement("div"); card.className="video-card";
-  const vid=document.createElement("video");
-  vid.src=videoObj.src; vid.controls=false; vid.autoplay=true; vid.loop=false; vid.muted=true;
+function partialChoose(category) {
+  if (!recommendationMap[category]) return partialRandom();
+  const choices = [
+    ...recommendationMap[category].high,
+    ...recommendationMap[category].moderate,
+    ...recommendationMap[category].low
+  ].map(c => c.toLowerCase());
 
-  const metrics=videoMetrics.get(videoObj.src);
-  vid.addEventListener("timeupdate",()=>{ if(vid.duration>0){ metrics.watchedPercent=Math.min(100,(vid.currentTime/vid.duration)*100); } });
-  vid.addEventListener("ended",()=>{ sessionCategoryScores[videoObj.category]+=scoreFromMetrics(metrics); playedVideos.add(videoObj.src); });
+  let best = null, highest = -999;
 
-  // actions
-  const actions=document.createElement("div"); actions.className="actions";
-  const likeBtn=document.createElement("div"); likeBtn.className="action-btn"; likeBtn.innerHTML="❤";
-  likeBtn.onclick=()=>{ metrics.liked=!metrics.liked; likeBtn.classList.toggle("liked",metrics.liked); };
-  const favBtn=document.createElement("div"); favBtn.className="action-btn"; favBtn.innerHTML="★";
-  favBtn.onclick=()=>{ metrics.favorited=!metrics.favorited; favBtn.classList.toggle("favorited",metrics.favorited); };
-  actions.appendChild(likeBtn); actions.appendChild(favBtn);
+  choices.forEach(cat => {
+    const score = partialCatScores[cat] || 0;
+    if (score > highest) { highest = score; best = cat; }
+  });
+
+  const match = partialVideos.filter(v => !partialPlayed.has(v.src) && v.category === best);
+  if (match.length) return match[Math.floor(Math.random() * match.length)];
+  return partialRandom();
+}
+
+// ---------- Create Card ----------
+function createPartialCard(obj) {
+  const wrap = document.createElement("div");
+  wrap.className = "video-card";
+
+  const vid = document.createElement("video");
+  vid.src = obj.src;
+  vid.autoplay = true;
+  vid.muted = true;
+  vid.loop = false;
+  vid.controls = false;
+
+  const m = partialMetrics.get(obj.src);
+  vid.addEventListener("timeupdate", () => {
+    if (vid.duration) m.watchedPercent = (vid.currentTime / vid.duration) * 100;
+  });
+
+  wrap.appendChild(vid);
 
   // username + caption
-  const infoBox=document.createElement("div"); infoBox.className="username-caption";
-  infoBox.innerHTML=`<strong>${videoObj.username}</strong><br>${videoObj.caption}`;
+  const cap = document.createElement("div");
+  cap.className = "caption-box";
+  cap.innerHTML = `<b>@${obj.username}</b> ${obj.caption}`;
+  wrap.appendChild(cap);
 
-  card.appendChild(vid); card.appendChild(actions); card.appendChild(infoBox);
-  return card;
+  // actions
+  const act = document.createElement("div");
+  act.className = "actions";
+
+  const like = document.createElement("div");
+  like.className = "action-btn";
+  like.innerHTML = "❤";
+  like.onclick = () => {
+    m.liked = !m.liked;
+    like.classList.toggle("liked", m.liked);
+  };
+
+  const fav = document.createElement("div");
+  fav.className = "action-btn";
+  fav.innerHTML = "★";
+  fav.onclick = () => {
+    m.favorited = !m.favorited;
+    fav.classList.toggle("favorited", m.favorited);
+  };
+
+  act.appendChild(like);
+  act.appendChild(fav);
+  wrap.appendChild(act);
+
+  // partial transparency short message
+  const msg = document.createElement("div");
+  msg.className = "partial-message";
+  msg.innerText = "Some videos you see are based on your recent activity.";
+  wrap.appendChild(msg);
+
+  return wrap;
 }
 
-function initPartialFeed(){
-  const feed=document.getElementById("feedContainer");
-  let current=randomUnplayedVideoPartial();
-  playedVideos.add(current.src);
-  feed.appendChild(createVideoCardPartial(current));
+// ---------- Init ----------
+function initPartial() {
+  const feed = document.getElementById("feedContainer");
+  let current = partialRandom();
+  partialPlayed.add(current.src);
+  feed.appendChild(createPartialCard(current));
 
-  window.addEventListener("scroll",()=>{
-    if(window.innerHeight+window.scrollY>=document.body.offsetHeight-180){
-      const next=chooseNextVideoPartial(current.category);
-      playedVideos.add(next.src);
-      feed.appendChild(createVideoCardPartial(next));
-      current=next;
+  window.addEventListener("scroll", () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 180) {
+      const next = partialChoose(current.category);
+      partialPlayed.add(next.src);
+      feed.appendChild(createPartialCard(next));
+      current = next;
     }
   });
 }
 
-initPartialFeed();
+initPartial();
