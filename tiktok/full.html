@@ -8,17 +8,12 @@
 </head>
 <body>
   <div class="video-container">
-    <video controls id="mainVideo"></video>
-    <div class="side-icons">
-      <div class="like" id="likeBtn">❤</div>
-      <div class="bookmark" id="bookmarkBtn">🔖</div>
+    <video id="mainVideo" autoplay muted></video>
+    <div id="controls">
+      <button id="likeBtn">❤️</button>
+      <button id="bookmarkBtn">🔖</button>
     </div>
-    <div class="video-info">
-      <div class="username" id="username">@user</div>
-      <div class="caption" id="caption">Caption goes here</div>
-      <div class="music" id="music">🎵 Music goes here</div>
-    </div>
-    <div class="recommendation-overlay" id="overlay"></div>
+    <div id="overlay"></div>
   </div>
 
   <script src="../js/tiktokFull.js"></script>
