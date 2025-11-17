@@ -42,17 +42,18 @@ function createVideoCard(videoObj) {
   const vid = document.createElement("video");
   vid.src = videoObj.src; vid.controls = false; vid.autoplay = true; vid.loop = false;
 
-  let engagement = "Low";
   let counted25 = false;
   vid.addEventListener("timeupdate", () => {
-    if (!counted25 && vid.duration > 0 && vid.currentTime / vid.duration >= 0.25) { engagement = "Moderate"; counted25 = true; }
-    if (vid.currentTime / vid.duration > 0.75) { engagement = "High"; }
+    if (!counted25 && vid.duration > 0 && vid.currentTime / vid.duration >= 0.25) {
+      console.log("Moderate engagement:", videoObj.category);
+      counted25 = true;
+    }
   });
 
   const actions = document.createElement("div"); actions.className = "actions";
 
   const likeBtn = document.createElement("div"); likeBtn.className = "action-btn"; likeBtn.innerHTML = "❤";
-  likeBtn.onclick = () => { likeBtn.classList.toggle("liked"); engagement = "Moderate"; };
+  likeBtn.onclick = () => { likeBtn.classList.toggle("liked"); };
 
   const favBtn = document.createElement("div"); favBtn.className = "action-btn"; favBtn.innerHTML = "★";
   favBtn.onclick = () => { favBtn.classList.toggle("favorited"); };
@@ -63,7 +64,7 @@ function createVideoCard(videoObj) {
   card.appendChild(vid); card.appendChild(actions);
 
   const expBox = document.createElement("div"); expBox.className = "explanation-box";
-  expBox.textContent = `Category: ${videoObj.category}\nEngagement: ${engagement}\nNext Recommendations: ${recommendationMap[videoObj.category].join(", ")}`;
+  expBox.textContent = "Recommended based on your recent likes";
   card.appendChild(expBox);
 
   return card;
