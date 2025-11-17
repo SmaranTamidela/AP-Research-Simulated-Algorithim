@@ -24,9 +24,10 @@ const recommendationMap = {
   party: { high:["gaming","singing"], moderate:["food","travel"], low:["knitting","art"] }
 };
 
-let engagementMetrics = {};
+let engagementMetrics = {}; 
 const videoContainers = document.querySelectorAll(".video-container");
 
+// Initialize videos
 videoContainers.forEach((container) => {
   const videoEl = container.querySelector("video");
   const likeBtn = container.querySelector(".like");
@@ -44,64 +45,79 @@ videoContainers.forEach((container) => {
     updateOverlay(currentVideo, overlay);
   });
 
-  // Bookmark button
+  // Favorite/bookmark button
   favBtn.addEventListener("click", () => {
     engagementMetrics[currentVideo].favorited = !engagementMetrics[currentVideo].favorited;
-    favBtn.style.color = engagementMetrics[currentVideo].favorited ? "yellow" : "#fff";
+    favBtn.classList.toggle("active");
     updateOverlay(currentVideo, overlay);
   });
 
-  // Watched percent
+  // Track watched percent
   videoEl.addEventListener("timeupdate", () => {
     engagementMetrics[currentVideo].watchedPercent = (videoEl.currentTime / videoEl.duration) * 100;
-    updateOverlay(currentVideo, overlay);
-  });
-
-  // On video end
-  videoEl.addEventListener("ended", () => {
-    const engagement = getEngagementLevel(engagementMetrics[currentVideo]);
-    const nextVideo = getNextVideo(currentVideo, engagement);
-    currentVideo = nextVideo;
-
-    if (!engagementMetrics[nextVideo]) engagementMetrics[nextVideo] = { liked: false, favorited: false, watchedPercent: 0 };
-    videoEl.src = "../videos/" + nextVideo;
-    videoEl.play();
     updateOverlay(currentVideo, overlay);
   });
 
   updateOverlay(currentVideo, overlay);
 });
 
+// Engagement level
 function getEngagementLevel(metrics) {
   if (metrics.favorited || metrics.watchedPercent > 75) return "high";
   if (metrics.liked || metrics.watchedPercent > 25) return "moderate";
   return "low";
 }
 
+// Get next video based on engagement
 function getNextVideo(currentVideo, engagementLevel) {
   const baseName = currentVideo.replace("tiktok.mp4", "");
   const nextCategories = recommendationMap[baseName][engagementLevel];
+
   for (let cat of nextCategories) {
     const nextVid = tiktokVideos.find(v => v.includes(cat));
     if (nextVid) return nextVid;
   }
+
   return tiktokVideos[Math.floor(Math.random() * tiktokVideos.length)];
 }
 
 // Full transparency overlay
-function updateOverlay(currentVideo, overlay) {
+function updateOverlay(videoName, overlay) {
+  const metrics = engagementMetrics[videoName];
+  const engagementLevel = getEngagementLevel(metrics);
   const reasons = [];
 
-  for (let vid in engagementMetrics) {
-    if (vid === currentVideo) continue; // skip current video
-    const metrics = engagementMetrics[vid];
+  if (metrics.favorited) reasons.push("Favorited");
+  if (metrics.liked) reasons.push("Liked");
+  if (metrics.watchedPercent > 0) reasons.push(`Watched ${metrics.watchedPercent.toFixed(0)}%`);
 
-    if (metrics.favorited) reasons.push(`you bookmarked ${vid.replace("tiktok.mp4","")}`);
-    if (metrics.liked) reasons.push(`you liked ${vid.replace("tiktok.mp4","")}`);
-    if (metrics.watchedPercent > 0) reasons.push(`you watched ${vid.replace("tiktok.mp4","")} for ${metrics.watchedPercent.toFixed(0)}%`);
-  }
-
-  overlay.textContent = reasons.length
-    ? `This video was recommended to you because ${reasons.join(" or ")}.`
-    : "This video was recommended based on your activity.";
+  const baseCategory = videoName.replace("tiktok.mp4", "");
+  overlay.textContent = `Recommendation Details:
+Previous Activity: ${reasons.length ? reasons.join(", ") : "None"}
+Engagement Level: ${engagementLevel}
+Based on Category: ${baseCategory}`;
 }
+
+// Scroll-triggered recommendation
+let lastContainer = null;
+window.addEventListener("scroll", () => {
+  videoContainers.forEach((container) => {
+    const rect = container.getBoundingClientRect();
+    const videoEl = container.querySelector("video");
+    const overlay = container.querySelector(".recommendation-overlay");
+
+    if (rect.top >= 0 && rect.top < window.innerHeight / 2) {
+      if (lastContainer !== container) {
+        lastContainer = container;
+
+        const currentVideo = videoEl.src.split("/").pop();
+        const engagement = getEngagementLevel(engagementMetrics[currentVideo]);
+        const nextVideo = getNextVideo(currentVideo, engagement);
+        videoEl.src = "../videos/" + nextVideo;
+
+        if (!engagementMetrics[nextVideo]) engagementMetrics[nextVideo] = { liked: false, favorited: false, watchedPercent: 0 };
+        updateOverlay(nextVideo, overlay);
+      }
+    }
+  });
+});
