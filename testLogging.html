@@ -1,1 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <button id="testBtn">Test Logging</button>
+
+    <script>
+      const testVideo = {
+        src: "testvideo.mp4",
+        category: "testing",
+        username: "@tester",
+        liked: true,
+        favorited: false,
+        watchedPercent: 75
+      };
+
+      document.getElementById("testBtn").onclick = () => {
+        fetch("YOUR_WEB_APP_URL_HERE", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(testVideo)
+        })
+        .then(res => res.text())
+        .then(data => console.log("Response from web app:", data))
+        .catch(err => console.error("Error:", err));
+      };
+    </script>
+  </body>
+</html>
 
