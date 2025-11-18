@@ -1,33 +1,30 @@
-/* allow scrolling on Chrome */
+/* -------------------- GLOBAL -------------------- */
 html, body {
-  height: 100%;
-  overflow-y: scroll;
-}
-
-body {
   margin: 0;
   padding: 0;
   background: #000;
   font-family: Arial, sans-serif;
+  height: auto !important;
+  overflow-y: auto !important;
 }
 
-/* main wrapper */
 .app-container {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: block !important;  /* force natural flow for scrolling */
+  min-height: auto !important;
+  overflow: visible !important;
   padding: 20px 0;
 }
 
-/* vertical feed */
+/* -------------------- FEED -------------------- */
 .feed {
-  width: 360px;               /* 9:16 “phone” layout */
+  width: 360px;               /* 9:16 "phone" look */
   display: flex;
   flex-direction: column;
   gap: 36px;
 }
 
-/* each video card */
+/* -------------------- VIDEO CARD -------------------- */
 .video-card {
   position: relative;
   width: 100%;
@@ -35,10 +32,9 @@ body {
   background: #111;
   border-radius: 12px;
   overflow: hidden;
-  flex-shrink: 0;
 }
 
-/* video fills the frame */
+/* video fills container */
 .video-card video {
   width: 100%;
   height: 100%;
@@ -46,7 +42,7 @@ body {
   display: block;
 }
 
-/* right-side action buttons */
+/* -------------------- ACTION BUTTONS -------------------- */
 .actions {
   position: absolute;
   right: 14px;
@@ -64,16 +60,10 @@ body {
   user-select: none;
   transition: transform 0.14s;
 }
-.action-btn:hover {
-  transform: scale(1.15);
-}
 
-.liked {
-  color: red !important;
-}
-.favorited {
-  color: gold !important;
-}
+.action-btn:hover { transform: scale(1.15); }
+.liked { color: red !important; }
+.favorited { color: gold !important; }
 
 .favorite-label {
   font-size: 12px;
@@ -82,7 +72,7 @@ body {
   margin-top: -6px;
 }
 
-/* top explanation bubble */
+/* -------------------- EXPLANATION BOX -------------------- */
 .explanation-box {
   position: absolute;
   top: 10px;
@@ -100,7 +90,7 @@ body {
   white-space: pre-wrap;
 }
 
-/* caption + username */
+/* -------------------- CAPTION -------------------- */
 .caption-box {
   position: absolute;
   bottom: 18px;
@@ -115,7 +105,8 @@ body {
   font-weight: bold;
 }
 
-/* container must allow full height so scrolling works */
+/* -------------------- FEED CONTAINER -------------------- */
 #feedContainer {
-  overflow-y: visible;
+  overflow: visible !important;
+  height: auto !important;
 }
