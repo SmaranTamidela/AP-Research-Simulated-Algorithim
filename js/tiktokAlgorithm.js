@@ -185,15 +185,20 @@ function initOpaqueFeed() {
   feed.appendChild(createVideoCard(start));
 
   let current = start;
+let isLoading = false;
 
-  window.addEventListener("scroll", () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 180) {
-      const next = chooseNextVideo(current.category);
-      playedVideos.add(next.src);
-      feed.appendChild(createVideoCard(next));
-      current = next;
-    }
-  });
+window.addEventListener("scroll", () => {
+  if (isLoading) return;
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 180) {
+    isLoading = true;
+    const next = chooseNextVideo(current.category);
+    playedVideos.add(next.src);
+    feed.appendChild(createVideoCardFull(next)); // or Partial
+    current = next;
+    setTimeout(() => { isLoading = false; }, 100); // short delay
+  }
+});
+
 }
 
 initOpaqueFeed();
