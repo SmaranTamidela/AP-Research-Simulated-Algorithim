@@ -88,14 +88,14 @@ function chooseNextVideo(currentCategory) {
 }
 
 // -------------------- LOGGING TO GOOGLE FORM --------------------
-const FORM_URL = "YOUR_GOOGLE_FORM_URL_HERE"; // replace
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSep9V79mQOkMJcaTtFfMqctqqKQmfjkajuLUdtIlbhxHjGY2A/viewform?usp=sharing&ouid=106991236575172530855"; // replace
 const ENTRY_IDS = {
-  src: "entry.XXXXXXXX",
-  category: "entry.YYYYYYYY",
-  username: "entry.ZZZZZZZZ",
-  liked: "entry.AAAAAAAA",
-  favorited: "entry.BBBBBBBB",
-  watchedPercent: "entry.CCCCCCCC"
+  src: "entry.2042513432",
+  category: "entry.1069451717Y",
+  username: "entry.1558797441",
+  liked: "entry.1710546849",
+  favorited: "entry.1832054697",
+  watchedPercent: "entry.2112114283"
 };
 
 function logEngagementToForm(videoObj, metrics) {
