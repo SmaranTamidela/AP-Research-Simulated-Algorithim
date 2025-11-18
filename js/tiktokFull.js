@@ -1,6 +1,6 @@
 // js/tiktokFull.js
 
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzGY9RdjsTk5xvxgkWqW8J_dQIBpgCyPY2kZzozwsEo_VN6_3KJZ5xrSF7xIwMNbUE0/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxqIwNTRS8NiCDaF4a1HV5Xq--3jHCPbcjhH9azqtjajNNpszFtsGzA6Vqf56tfSM8g/exec";
 
 // ---------- Recommendation map ----------
 const recommendationMap = {
