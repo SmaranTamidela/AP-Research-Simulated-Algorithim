@@ -114,6 +114,21 @@ document.addEventListener("DOMContentLoaded", () => {
       // logToForm(videoObj, metrics, "Partial");
     });
 
+    function logEngagementToSheets(videoObj, metrics) {
+  const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSep9V79mQOkMJcaTtFfMqctqqKQmfjkajuLUdtIlbhxHjGY2A/formResponse"; // replace with your Google Form "formResponse" URL
+  const formData = new FormData();
+
+  // Replace entry.xxxxx with the correct entry IDs from your form
+  src: "entry.2042513432",
+  category: "entry.1069451717Y",
+  username: "entry.1558797441",
+  liked: "entry.1710546849",
+  favorited: "entry.1832054697",
+  watchedPercent: "entry.2112114283"
+    
+  navigator.sendBeacon(formURL, formData);
+};
+
     const actions = document.createElement("div"); actions.className="actions";
     const likeBtn = document.createElement("div"); likeBtn.className="action-btn"; likeBtn.innerHTML="❤";
     likeBtn.onclick = () => { metrics.liked = !metrics.liked; likeBtn.classList.toggle("liked", metrics.liked); updateExp(); };
