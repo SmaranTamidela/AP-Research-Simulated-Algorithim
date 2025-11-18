@@ -40,9 +40,15 @@ const playedVideos = new Set();
 const videoMetrics = new Map();
 videos.forEach(v=>{ sessionCategoryScores[v.category]=0; videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false}); });
 
-function randomUnplayedVideo(){ const unplayed = videos.filter(v=>!playedVideos.has(v.src)); if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} return unplayed[Math.floor(Math.random()*unplayed.length)]; }
+function randomUnplayedVideo(){ 
+  const unplayed = videos.filter(v=>!playedVideos.has(v.src)); 
+  if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} 
+  return unplayed[Math.floor(Math.random()*unplayed.length)]; 
+}
 
-function scoreFromMetrics(metrics){ return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
+function scoreFromMetrics(metrics){ 
+  return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); 
+}
 
 function chooseNextVideo(currentCategory){
   if(!recommendationMap[currentCategory]) return randomUnplayedVideo();
@@ -58,23 +64,24 @@ function createVideoCardPartial(videoObj){
   const card=document.createElement("div");card.className="video-card";
   const vid=document.createElement("video");vid.src=videoObj.src;vid.controls=false;vid.autoplay=true;vid.loop=false;vid.muted=true;
   const metrics=videoMetrics.get(videoObj.src);
+
   vid.addEventListener("timeupdate",()=>{if(vid.duration>0){metrics.watchedPercent=Math.min(100,(vid.currentTime/vid.duration)*100);}});
-  
-  vid.addEventListener("ended", () => {
-    sessionCategoryScores[videoObj.category] = (sessionCategoryScores[videoObj.category] || 0) + scoreFromMetrics(metrics);
+
+  vid.addEventListener("ended",()=>{
+    sessionCategoryScores[videoObj.category]=(sessionCategoryScores[videoObj.category]||0)+scoreFromMetrics(metrics);
     playedVideos.add(videoObj.src);
 
-    // Send engagement data to Google Sheets
-    fetch("https://script.google.com/macros/s/AKfycbyp3R3LX3s1ofEe4vJpc92QLo1YfaXXdp2h_B6I6VmFqDlQcKfFV04T_IctqrSMsT8/exec", {
+    // --- SEND DATA TO GOOGLE SHEET ---
+    fetch("https://script.google.com/macros/s/AKfycbwIpBTgAQUNgDjoxX9Wrn34kAmsicU1wENjhEfijsj4rf72mDNvP-SkxZ6DV8f5Q_s/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: videoObj.username,
+        src: videoObj.src,
         category: videoObj.category,
-        watchedPercent: metrics.watchedPercent,
+        username: videoObj.username,
         liked: metrics.liked,
         favorited: metrics.favorited,
-        timestamp: new Date().toISOString()
+        watchedPercent: metrics.watchedPercent
       })
     });
   });
@@ -87,22 +94,10 @@ function createVideoCardPartial(videoObj){
   const favText=document.createElement("div");favText.className="favorite-label";favText.textContent="Favorite";
   actions.appendChild(likeBtn);actions.appendChild(favBtn);actions.appendChild(favText);
 
-  const captionBox=document.createElement("div");captionBox.className="caption-box";captionBox.innerHTML=`<div class="username">${videoObj.username}</div>${videoObj.caption}`;
+  const captionBox=document.createElement("div");captionBox.className="caption-box";
+  captionBox.innerHTML=`<div class="username">${videoObj.username}</div>${videoObj.caption}`;
 
-  const expBox=document.createElement("div");expBox.className="explanation-box";
-function updateExp(){
-  // 50% chance to show a simple generic message instead of full percentages
-  if(Math.random() < 0.5){
-    expBox.textContent = "You may like this video based on your recent activity.";
-    return;
-  }
-
-}
-
-  card.appendChild(vid);card.appendChild(actions);card.appendChild(expBox);card.appendChild(captionBox);
-  vid.addEventListener("timeupdate", updateExp);
-  updateExp();
-
+  card.appendChild(vid);card.appendChild(actions);card.appendChild(captionBox);
   return card;
 }
 
@@ -120,5 +115,4 @@ function initPartialFeed(){
   });
 }
 
-initPartialFeed();  
- 
+initPartialFeed();
