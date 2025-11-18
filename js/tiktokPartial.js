@@ -47,7 +47,7 @@ videos.forEach(v => {
 
 // ---------- Logging Function ----------
 function logEngagementToSheets(videoObj, metrics) {
-  fetch("YOUR_WEB_APP_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbyuiI-6ro1iHIoIGzseetgNjrTj4Tc9BjQZcyVdZagZRjMgXZDZpS271fxaFcvrfioG/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
