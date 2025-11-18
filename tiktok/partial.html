@@ -1,38 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Partial Transparency</title>
-  <link rel="stylesheet" href="../css/tiktok.css">
+  <meta charset="UTF-8">
+  <title>TikTok Partial Feed</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
-  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-database.js";
+  <div id="feedContainer"></div>
 
-  // Replace with your Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDY9k4h5_6WoeN5RD6Gxgy2ZZUwBo5VZxc",
-    authDomain: "ap-research-engagement-data.firebaseapp.com",
-    databaseURL: "https://ap-research-engagement-data-default-rtdb.firebaseio.com",
-    projectId: "ap-research-engagement-data",
-    storageBucket: "ap-research-engagement-data.firebasestorage.app",
-    messagingSenderId: "380485529410",
-    appId: "1:380485529410:web:5969cf7acb9038c07722db"
-  };
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const database = getDatabase(app);
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDY9k4h5_6WoeN5RD6Gxgy2ZZUwBo5VZxc",
+      authDomain: "ap-research-engagement-data.firebaseapp.com",
+      databaseURL: "https://ap-research-engagement-data-default-rtdb.firebaseio.com",
+      projectId: "ap-research-engagement-data",
+      storageBucket: "ap-research-engagement-data.appspot.com",
+      messagingSenderId: "380485529410",
+      appId: "1:380485529410:web:5969cf7acb9038c07722db"
+    };
 
-  // Make it accessible to your other scripts
-  window.database = database;
-</script>
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    window.database = firebase.database(); // so your tiktokPartial.js can use it
+  </script>
 
-  <div class="app-container">
-    <div id="feedContainer" class="feed"></div>
-  </div>
-  <script src="../js/tiktokPartial.js"></script>
+  <!-- Your TikTok Partial JS -->
+  <script type="module" src="js/tiktokPartial.js"></script>
 </body>
 </html>
