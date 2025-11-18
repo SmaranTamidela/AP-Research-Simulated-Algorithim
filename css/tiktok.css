@@ -1,22 +1,18 @@
-/* -------------------- GLOBAL -------------------- */
-html, body {
+body {
   margin: 0;
   padding: 0;
   background: #000;
   font-family: Arial, sans-serif;
-  height: auto !important;
-  overflow-y: auto !important;
+  overflow-y: auto;
 }
 
 .app-container {
   width: 100%;
-  display: block !important;  /* force natural flow for scrolling */
-  min-height: auto !important;
-  overflow: visible !important;
+  display: flex;
+  justify-content: center;
   padding: 20px 0;
 }
 
-/* -------------------- FEED -------------------- */
 .feed {
   width: 360px;               /* 9:16 "phone" look */
   display: flex;
@@ -24,11 +20,11 @@ html, body {
   gap: 36px;
 }
 
-/* -------------------- VIDEO CARD -------------------- */
+/* 9:16 video card */
 .video-card {
   position: relative;
   width: 100%;
-  height: 640px;              /* 9:16 container */
+  height: 640px;             /* 9:16 container */
   background: #111;
   border-radius: 12px;
   overflow: hidden;
@@ -42,7 +38,7 @@ html, body {
   display: block;
 }
 
-/* -------------------- ACTION BUTTONS -------------------- */
+/* actions on right bottom */
 .actions {
   position: absolute;
   right: 14px;
@@ -60,8 +56,8 @@ html, body {
   user-select: none;
   transition: transform 0.14s;
 }
-
 .action-btn:hover { transform: scale(1.15); }
+
 .liked { color: red !important; }
 .favorited { color: gold !important; }
 
@@ -72,7 +68,7 @@ html, body {
   margin-top: -6px;
 }
 
-/* -------------------- EXPLANATION BOX -------------------- */
+/* explanation box */
 .explanation-box {
   position: absolute;
   top: 10px;
@@ -90,7 +86,7 @@ html, body {
   white-space: pre-wrap;
 }
 
-/* -------------------- CAPTION -------------------- */
+/* caption and username at bottom left */
 .caption-box {
   position: absolute;
   bottom: 18px;
@@ -100,13 +96,6 @@ html, body {
   font-size: 14px;
   line-height: 1.2;
 }
-
 .caption-box .username {
   font-weight: bold;
-}
-
-/* -------------------- FEED CONTAINER -------------------- */
-#feedContainer {
-  overflow: visible !important;
-  height: auto !important;
 }
