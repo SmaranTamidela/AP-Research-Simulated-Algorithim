@@ -139,18 +139,7 @@ function createVideoCard(videoObj) {
   captionBox.className = "caption-box";
   captionBox.innerHTML = `<div class="username">${videoObj.username}</div>${videoObj.caption}`;
 
-  // ---------- EXPLANATION BOX ----------
-  const expBox = document.createElement("div");
-  expBox.className = "explanation-box";
-  expBox.textContent = `This video was recommended to you because you have shown high engagement in videos related to ${videoObj.category}.`;
 
-  card.appendChild(vid);
-  card.appendChild(actions);
-  card.appendChild(expBox);
-  card.appendChild(captionBox);
-
-  return card;
-}
 
 function initOpaqueFeed() {
   const feed = document.getElementById("feedContainer");
