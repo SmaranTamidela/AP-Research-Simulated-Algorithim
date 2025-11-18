@@ -1,148 +1,110 @@
-// js/tiktokPartial.js (Partial feed with Google Sheet logging)
-
-// ---------- Google Sheet Logging ----------
-const LOG_URL = "YOUR_WEB_APP_URL_HERE"; // replace with your Apps Script URL
-function logEngagement(videoObj, metrics){
-  fetch(LOG_URL, {
-    method: "POST",
-    body: JSON.stringify({
-      video: videoObj.src,
-      category: videoObj.category,
-      liked: metrics.liked,
-      favorited: metrics.favorited,
-      watchedPercent: metrics.watchedPercent
-    })
-  }).catch(err => console.error("Logging failed:", err));
-}
-
-// ---------- Recommendation Map ----------
+// js/tiktokPartial.js
 const recommendationMap = {
-  earth: { high: ["science","technology"], moderate: ["travel","animal"], low: ["art","knitting"] },
-  food: { high: ["travel","party"], moderate: ["science","technology"], low: ["knitting","art"] },
-  soccer: { high: ["basketball","boxing"], moderate: ["boxing","driving"], low: ["travel","earth"] },
-  travel: { high: ["food","singing"], moderate: ["earth","animal"], low: ["science","technology"] },
-  knitting: { high: ["art","technology"], moderate: ["food","travel"], low: ["singing","knitting"] },
-  science: { high: ["technology","earth"], moderate: ["animal","food"], low: ["soccer","basketball"] },
-  basketball: { high: ["soccer","boxing"], moderate: ["boxing","driving"], low: ["knitting","art"] },
-  boxing: { high: ["soccer","basketball"], moderate: ["driving","soccer"], low: ["travel","earth"] },
-  driving: { high: ["boxing","soccer"], moderate: ["travel","food"], low: ["technology","science"] },
-  animal: { high: ["earth","science"], moderate: ["travel","food"], low: ["knitting","art"] },
-  technology: { high: ["science","earth"], moderate: ["art","knitting"], low: ["driving","boxing"] },
-  art: { high: ["knitting","technology"], moderate: ["food","travel"], low: ["singing","art"] },
-  singing: { high: ["travel","food"], moderate: ["art","knitting"], low: ["science","technology"] },
-  gaming: { high: ["party","soccer"], moderate: ["technology","science"], low: ["driving","boxing"] },
-  party: { high: ["gaming","singing"], moderate: ["food","travel"], low: ["knitting","art"] }
+  "earth": { high: ["science","technology"], moderate: ["travel","animal"], low: ["art","knitting"] },
+  "food":  { high: ["travel","party"], moderate: ["science","technology"], low: ["knitting","art"] },
+  "soccer":{ high: ["basketball","boxing"], moderate: ["boxing","driving"], low: ["travel","earth"] },
+  "travel":{ high: ["food","singing"], moderate: ["earth","animal"], low: ["science","technology"] },
+  "knitting":{high:["art","technology"],moderate:["food","travel"],low:["singing","knitting"]},
+  "science":{high:["technology","earth"],moderate:["animal","food"],low:["soccer","basketball"]},
+  "basketball":{high:["soccer","boxing"],moderate:["boxing","driving"],low:["knitting","art"]},
+  "boxing":{high:["soccer","basketball"],moderate:["driving","soccer"],low:["travel","earth"]},
+  "driving":{high:["boxing","soccer"],moderate:["travel","food"],low:["technology","science"]},
+  "animal":{high:["earth","science"],moderate:["travel","food"],low:["knitting","art"]},
+  "technology":{high:["science","earth"],moderate:["art","knitting"],low:["driving","boxing"]},
+  "art":{high:["knitting","technology"],moderate:["food","travel"],low:["singing","art"]},
+  "singing":{high:["travel","food"],moderate:["art","knitting"],low:["science","technology"]},
+  "gaming":{high:["party","soccer"],moderate:["technology","science"],low:["driving","boxing"]},
+  "party":{high:["gaming","singing"],moderate:["food","travel"],low:["knitting","art"]}
 };
 
-// ---------- Video Library ----------
 const videos = [
-  { src: "../videos/animaltiktok.mp4", category: "animal", username: "@naturefan", caption: "Cute wildlife compilation!" },
-  { src: "../videos/arttiktok.mp4", category: "art", username: "@artistlife", caption: "Amazing painting timelapse" },
-  { src: "../videos/basketballtiktok.mp4", category: "basketball", username: "@baller23", caption: "Epic dunk highlights!" },
-  { src: "../videos/boxingtiktok.mp4", category: "boxing", username: "@fightclub", caption: "Top knockout moments" },
-  { src: "../videos/drivingtiktok.mp4", category: "driving", username: "@carguy", caption: "Supercars on the highway" },
-  { src: "../videos/earthtiktok.mp4", category: "earth", username: "@planetlover", caption: "Beautiful earth landscapes" },
-  { src: "../videos/foodtiktok.mp4", category: "food", username: "@foodie", caption: "Delicious recipes you must try" },
-  { src: "../videos/gamingtiktok.mp4", category: "gaming", username: "@gamerlife", caption: "Top gaming moments" },
-  { src: "../videos/knittingtiktok.mp4", category: "knitting", username: "@crafty", caption: "DIY knitting projects" },
-  { src: "../videos/partytiktok.mp4", category: "party", username: "@partytime", caption: "Best party clips!" },
-  { src: "../videos/sciencetiktok.mp4", category: "science", username: "@sciencenerd", caption: "Amazing science experiments" },
-  { src: "../videos/singingtiktok.mp4", category: "singing", username: "@singerlife", caption: "Beautiful singing performances" },
-  { src: "../videos/soccertiktok.mp4", category: "soccer", username: "@soccerpro", caption: "Top soccer goals" },
-  { src: "../videos/technologytiktok.mp4", category: "technology", username: "@techguru", caption: "Cool gadgets and inventions" },
-  { src: "../videos/traveltiktok.mp4", category: "travel", username: "@traveler", caption: "Best travel destinations" }
+  { src: "../videos/animaltiktok.mp4", category: "animal", username:"@naturefan", caption:"Cute wildlife compilation!" },
+  { src: "../videos/arttiktok.mp4", category: "art", username:"@artistlife", caption:"Amazing painting timelapse" },
+  { src: "../videos/basketballtiktok.mp4", category: "basketball", username:"@baller23", caption:"Epic dunk highlights!" },
+  { src: "../videos/boxingtiktok.mp4", category: "boxing", username:"@fightclub", caption:"Top knockout moments" },
+  { src: "../videos/drivingtiktok.mp4", category: "driving", username:"@carguy", caption:"Supercars on the highway" },
+  { src: "../videos/earthtiktok.mp4", category: "earth", username:"@planetlover", caption:"Beautiful earth landscapes" },
+  { src: "../videos/foodtiktok.mp4", category: "food", username:"@foodie", caption:"Delicious recipes you must try" },
+  { src: "../videos/gamingtiktok.mp4", category: "gaming", username:"@gamerlife", caption:"Top gaming moments" },
+  { src: "../videos/knittingtiktok.mp4", category: "knitting", username:"@crafty", caption:"DIY knitting projects" },
+  { src: "../videos/partytiktok.mp4", category: "party", username:"@partytime", caption:"Best party clips!" },
+  { src: "../videos/sciencetiktok.mp4", category: "science", username:"@sciencenerd", caption:"Amazing science experiments" },
+  { src: "../videos/singingtiktok.mp4", category: "singing", username:"@singerlife", caption:"Beautiful singing performances" },
+  { src: "../videos/soccertiktok.mp4", category: "soccer", username:"@soccerpro", caption:"Top soccer goals" },
+  { src: "../videos/technologytiktok.mp4", category: "technology", username:"@techguru", caption:"Cool gadgets and inventions" },
+  { src: "../videos/traveltiktok.mp4", category: "travel", username:"@traveler", caption:"Best travel destinations" }
 ];
 
-// ---------- Session State ----------
 const sessionCategoryScores = {};
 const playedVideos = new Set();
 const videoMetrics = new Map();
-videos.forEach(v => {
-  sessionCategoryScores[v.category] = 0;
-  videoMetrics.set(v.src, { watchedPercent: 0, liked: false, favorited: false });
-});
+videos.forEach(v=>{ sessionCategoryScores[v.category]=0; videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false}); });
 
-// ---------- Helpers ----------
-function randomUnplayedVideo() {
-  const unplayed = videos.filter(v => !playedVideos.has(v.src));
-  if (!unplayed.length) { playedVideos.clear(); return videos[Math.floor(Math.random() * videos.length)]; }
-  return unplayed[Math.floor(Math.random() * unplayed.length)];
+function randomUnplayedVideo(){ 
+  const unplayed = videos.filter(v=>!playedVideos.has(v.src)); 
+  if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} 
+  return unplayed[Math.floor(Math.random()*unplayed.length)]; 
+}
+function scoreFromMetrics(metrics){ return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
+
+function chooseNextVideo(currentCategory){
+  if(!recommendationMap[currentCategory]) return randomUnplayedVideo();
+  const levels=["high","moderate","low"],candidateCats=[];
+  levels.forEach(l=>{const arr=recommendationMap[currentCategory][l];if(Array.isArray(arr)) arr.forEach(c=>{if(!candidateCats.includes(c))candidateCats.push(c);});});
+  let bestCategory=null,bestScore=-Infinity;
+  candidateCats.forEach(cat=>{const key=cat.toLowerCase(),score=sessionCategoryScores[key]||0;if(score>bestScore){bestScore=score;bestCategory=key;}});
+  if(!bestCategory||bestScore<=0){const setCand=new Set(candidateCats.map(c=>c.toLowerCase()));const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&setCand.has(v.category));return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();}
+  const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&v.category===bestCategory);return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();
 }
 
-function scoreFromMetrics(metrics) {
-  return (metrics.favorited ? 2 : 0) + (metrics.liked ? 1 : 0) + (metrics.watchedPercent / 100);
+function logEngagement(data){
+  fetch("https://script.google.com/macros/s/AKfycbzGlnQLPJVEfGwAK3v4E9P1OSJHyx0nSNRYgIgIp1jTpj5LEi5vst129xsLtE_jH5So/exec", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(data)
+  }).catch(err=>console.error("Logging failed:",err));
 }
 
-function chooseNextVideo(currentCategory) {
-  if (!recommendationMap[currentCategory]) return randomUnplayedVideo();
-  const candidateCategories = [];
-  ["high","moderate","low"].forEach(level => {
-    recommendationMap[currentCategory][level].forEach(c => {
-      if (!candidateCategories.includes(c)) candidateCategories.push(c);
-    });
-  });
-  let bestCategory = null, bestScore = -Infinity;
-  candidateCategories.forEach(cat => {
-    const score = sessionCategoryScores[cat] || 0;
-    if (score > bestScore) { bestScore = score; bestCategory = cat; }
-  });
-  const unplayed = videos.filter(v => !playedVideos.has(v.src) && v.category === bestCategory);
-  return unplayed.length ? unplayed[Math.floor(Math.random() * unplayed.length)] : randomUnplayedVideo();
-}
+function createVideoCardPartial(videoObj){
+  const card=document.createElement("div");card.className="video-card";
+  const vid=document.createElement("video");vid.src=videoObj.src;vid.controls=false;vid.autoplay=true;vid.loop=false;vid.muted=true;
+  const metrics=videoMetrics.get(videoObj.src);
+  
+  vid.addEventListener("timeupdate",()=>{if(vid.duration>0){metrics.watchedPercent=Math.min(100,(vid.currentTime/vid.duration)*100);}});
 
-// ---------- DOM ----------
-function createVideoCardPartial(videoObj) {
-  const card = document.createElement("div"); card.className = "video-card";
-
-  const vid = document.createElement("video");
-  vid.src = videoObj.src; vid.autoplay = true; vid.loop = false; vid.controls = false; vid.muted = true;
-
-  const metrics = videoMetrics.get(videoObj.src);
-  vid.addEventListener("timeupdate", () => {
-    if (vid.duration > 0) metrics.watchedPercent = Math.min(100, (vid.currentTime / vid.duration) * 100);
-  });
-
-  vid.addEventListener("ended", () => {
-    sessionCategoryScores[videoObj.category] += scoreFromMetrics(metrics);
+  vid.addEventListener("ended",()=>{
+    sessionCategoryScores[videoObj.category]=(sessionCategoryScores[videoObj.category]||0)+scoreFromMetrics(metrics);
     playedVideos.add(videoObj.src);
-    logEngagement(videoObj, metrics);
+    logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption});
   });
 
-  // Actions
-  const actions = document.createElement("div"); actions.className = "actions";
-  const likeBtn = document.createElement("div"); likeBtn.className = "action-btn"; likeBtn.innerHTML = "❤";
-  likeBtn.onclick = () => { metrics.liked = !metrics.liked; likeBtn.classList.toggle("liked", metrics.liked); logEngagement(videoObj, metrics); };
-  const favBtn = document.createElement("div"); favBtn.className = "action-btn"; favBtn.innerHTML = "★";
-  favBtn.onclick = () => { metrics.favorited = !metrics.favorited; favBtn.classList.toggle("favorited", metrics.favorited); logEngagement(videoObj, metrics); };
-  const favText = document.createElement("div"); favText.className = "favorite-label"; favText.textContent = "Favorite";
-  actions.appendChild(likeBtn); actions.appendChild(favBtn); actions.appendChild(favText);
+  const actions=document.createElement("div");actions.className="actions";
+  const likeBtn=document.createElement("div");likeBtn.className="action-btn";likeBtn.innerHTML="❤";
+  likeBtn.onclick=()=>{metrics.liked=!metrics.liked;likeBtn.classList.toggle("liked",metrics.liked); logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption}); };
+  const favBtn=document.createElement("div");favBtn.className="action-btn";favBtn.innerHTML="★";
+  favBtn.onclick=()=>{metrics.favorited=!metrics.favorited;favBtn.classList.toggle("favorited",metrics.favorited); logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption}); };
+  const favText=document.createElement("div");favText.className="favorite-label";favText.textContent="Favorite";
+  actions.appendChild(likeBtn);actions.appendChild(favBtn);actions.appendChild(favText);
 
-  // Partial Explanation
-  const expBox = document.createElement("div"); expBox.className = "explanation-box";
-  expBox.textContent = "You may like this video based on your recent activity.";
+  const captionBox=document.createElement("div");captionBox.className="caption-box";captionBox.innerHTML=`<div class="username">${videoObj.username}</div>${videoObj.caption}`;
 
-  const captionBox = document.createElement("div"); captionBox.className = "caption-box";
-  captionBox.innerHTML = `<div class="username">${videoObj.username}</div>${videoObj.caption}`;
+  card.appendChild(vid);card.appendChild(actions);card.appendChild(captionBox);
 
-  card.appendChild(vid); card.appendChild(actions); card.appendChild(expBox); card.appendChild(captionBox);
   return card;
 }
 
-// ---------- Initialize Partial Feed ----------
-function initPartialFeed() {
-  const feed = document.getElementById("feedContainer");
-  let current = randomUnplayedVideo();
-  playedVideos.add(current.src);
-  feed.appendChild(createVideoCardPartial(current));
-
-  window.addEventListener("scroll", () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 180) {
-      current = chooseNextVideo(current.category);
-      playedVideos.add(current.src);
-      feed.appendChild(createVideoCardPartial(current));
+function initPartialFeed(){
+  const feed=document.getElementById("feedContainer");
+  const start=randomUnplayedVideo();playedVideos.add(start.src);feed.appendChild(createVideoCardPartial(start));
+  let current=start;
+  window.addEventListener("scroll",()=>{
+    if(window.innerHeight+window.scrollY>=document.body.offsetHeight-180){
+      const next=chooseNextVideo(current.category);
+      playedVideos.add(next.src);
+      feed.appendChild(createVideoCardPartial(next));
+      current=next;
     }
   });
 }
 
-// Start feed
 initPartialFeed();
