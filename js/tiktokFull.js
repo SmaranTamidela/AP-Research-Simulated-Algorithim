@@ -119,11 +119,15 @@ function createVideoCardFull(videoObj){
 
   const expBox=document.createElement("div"); expBox.className="explanation-box";
   function updateExp(){
-    if(Math.random() < 0.5){
-      expBox.textContent = "You may like this video based on your recent activity.";
-      return;
-    }
+
+  let topCats = Object.entries(sessionCategoryScores).sort((a,b)=>b[1]-a[1]).slice(0,2);
+  const messages = topCats.map(c=>{
+    if(metrics.favorited || metrics.liked) return `You have favorited or liked videos related to ${c[0]}`;
+    return `You have watched videos related to ${c[0]}`;
+  });
+  expBox.textContent = messages.join("\n");
   }
+
 
   card.appendChild(vid); card.appendChild(actions); card.appendChild(expBox); card.appendChild(captionBox);
   updateExp();
