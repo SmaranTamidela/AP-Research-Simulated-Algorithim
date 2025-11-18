@@ -1,35 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>TikTok Partial Feed</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Partial Transparency</title>
+  <link rel="stylesheet" href="../css/tiktok.css">
 </head>
 <body>
-  <div id="feedContainer"></div>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
+  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-database.js";
 
-  <!-- Firebase SDKs (compat version) -->
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
+  // Replace with your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyDY9k4h5_6WoeN5RD6Gxgy2ZZUwBo5VZxc",
+    authDomain: "ap-research-engagement-data.firebaseapp.com",
+    databaseURL: "https://ap-research-engagement-data-default-rtdb.firebaseio.com",
+    projectId: "ap-research-engagement-data",
+    storageBucket: "ap-research-engagement-data.firebasestorage.app",
+    messagingSenderId: "380485529410",
+    appId: "1:380485529410:web:5969cf7acb9038c07722db"
+  };
 
-  <script>
-    // Your Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDY9k4h5_6WoeN5RD6Gxgy2ZZUwBo5VZxc",
-      authDomain: "ap-research-engagement-data.firebaseapp.com",
-      databaseURL: "https://ap-research-engagement-data-default-rtdb.firebaseio.com",
-      projectId: "ap-research-engagement-data",
-      storageBucket: "ap-research-engagement-data.appspot.com",
-      messagingSenderId: "380485529410",
-      appId: "1:380485529410:web:5969cf7acb9038c07722db"
-    };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    window.database = firebase.database(); // make DB accessible to JS
-  </script>
+  // Make it accessible to your other scripts
+  window.database = database;
+</script>
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+  import { getDatabase, ref as firebaseDatabaseRef, push } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
 
-  <!-- TikTok Partial JS (regular script, not module) -->
-  <script src="js/tiktokPartial.js"></script>
+  // Your Firebase config (replace with your actual project config if different)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDY9k4h5_6WoeN5RD6Gxgy2ZZUwBo5VZxc",
+    authDomain: "ap-research-engagement-data.firebaseapp.com",
+    projectId: "ap-research-engagement-data",
+    storageBucket: "ap-research-engagement-data.firebasestorage.app",
+    messagingSenderId: "380485529410",
+    appId: "1:380485529410:web:5969cf7acb9038c07722db",
+    measurementId: "G-YQK1WPQD3Y"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  window.database = getDatabase(app);
+
+  console.log("Firebase initialized for engagement logging");
+</script>
+
+<!-- Your TikTok feed script -->
+<script type="module" src="./js/tiktokPartial.js"></script>
+
+  <div class="app-container">
+    <div id="feedContainer" class="feed"></div>
+  </div>
+
+  <script src="../js/tiktokPartial.js"></script>
 </body>
 </html>
+  
