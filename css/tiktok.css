@@ -99,6 +99,3 @@ body {
 .caption-box .username {
   font-weight: bold;
 }
-#feedContainer {
-  overflow: visible; /* make sure this isn't hidden */
-}
