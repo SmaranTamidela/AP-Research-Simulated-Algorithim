@@ -59,38 +59,13 @@ function createVideoCardPartial(videoObj){
   const metrics=videoMetrics.get(videoObj.src);
   vid.addEventListener("timeupdate",()=>{if(vid.duration>0){metrics.watchedPercent=Math.min(100,(vid.currentTime/vid.duration)*100);}});
 
-  function logEngagement() {
-    firebase.database().ref("engagementData").push({
-      video: videoObj.src,
-      category: videoObj.category,
-      watchedPercent: metrics.watchedPercent,
-      liked: metrics.liked,
-      favorited: metrics.favorited,
-      timestamp: Date.now()
-    });
-  }
-
-  vid.addEventListener("ended",()=>{
-    sessionCategoryScores[videoObj.category]=(sessionCategoryScores[videoObj.category]||0)+scoreFromMetrics(metrics);
-    playedVideos.add(videoObj.src);
-    logEngagement(); // log on video end
-  });
+  vid.addEventListener("ended",()=>{sessionCategoryScores[videoObj.category]=(sessionCategoryScores[videoObj.category]||0)+scoreFromMetrics(metrics);playedVideos.add(videoObj.src);});
 
   const actions=document.createElement("div");actions.className="actions";
   const likeBtn=document.createElement("div");likeBtn.className="action-btn";likeBtn.innerHTML="❤";
-  likeBtn.onclick=()=>{
-    metrics.liked=!metrics.liked;
-    likeBtn.classList.toggle("liked",metrics.liked);
-    updateExp();
-    logEngagement(); // log on like
-  };
+  likeBtn.onclick=()=>{metrics.liked=!metrics.liked;likeBtn.classList.toggle("liked",metrics.liked); updateExp(); };
   const favBtn=document.createElement("div");favBtn.className="action-btn";favBtn.innerHTML="★";
-  favBtn.onclick=()=>{
-    metrics.favorited=!metrics.favorited;
-    favBtn.classList.toggle("favorited",metrics.favorited);
-    updateExp();
-    logEngagement(); // log on favorite
-  };
+  favBtn.onclick=()=>{metrics.favorited=!metrics.favorited;favBtn.classList.toggle("favorited",metrics.favorited); updateExp(); };
   const favText=document.createElement("div");favText.className="favorite-label";favText.textContent="Favorite";
   actions.appendChild(likeBtn);actions.appendChild(favBtn);actions.appendChild(favText);
 
@@ -98,12 +73,14 @@ function createVideoCardPartial(videoObj){
 
   const expBox=document.createElement("div");expBox.className="explanation-box";
 
-  function updateExp(){
-    if(Math.random() < 0.5){
-      expBox.textContent = "You may like this video based on your recent activity.";
-      return;
-    }
+function updateExp(){
+  // 50% chance to show a simple generic message instead of full percentages
+  if(Math.random() < 0.5){
+    expBox.textContent = "You may like this video based on your recent activity.";
+    return;
   }
+
+}
 
   card.appendChild(vid);card.appendChild(actions);card.appendChild(expBox);card.appendChild(captionBox);
 
@@ -128,3 +105,4 @@ function initPartialFeed(){
 }
 
 initPartialFeed();
+
