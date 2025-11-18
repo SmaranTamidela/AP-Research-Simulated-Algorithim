@@ -90,6 +90,14 @@ function createVideoCardPartial(videoObj){
   card.appendChild(vid);card.appendChild(actions);card.appendChild(captionBox);
   return card;
 }
+function updateExp(){
+  // 50% chance to show a simple generic message instead of full percentages
+  if(Math.random() < 0.5){
+    expBox.textContent = "You may like this video based on your recent activity.";
+    return;
+  }
+
+}
 
 function initPartialFeed(){
   const feed=document.getElementById("feedContainer");
