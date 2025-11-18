@@ -2,34 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>TikTok Partial Feed</title>
+  <title>TikTok Feed</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="feedContainer"></div>
-
-  <!-- Firebase SDKs (compat versions) -->
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
-
-  <script>
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDY9k4h5_6WoeN5RD6Gxgy2ZZUwBo5VZxc",
-      authDomain: "ap-research-engagement-data.firebaseapp.com",
-      databaseURL: "https://ap-research-engagement-data-default-rtdb.firebaseio.com",
-      projectId: "ap-research-engagement-data",
-      storageBucket: "ap-research-engagement-data.appspot.com",
-      messagingSenderId: "380485529410",
-      appId: "1:380485529410:web:5969cf7acb9038c07722db"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    window.database = firebase.database(); // global database reference
-  </script>
-
-  <!-- Partial feed JS -->
-  <script src="js/tiktokPartial.js"></script>
+  <script type="module" src="js/tiktokPartial.js"></script>
 </body>
 </html>
