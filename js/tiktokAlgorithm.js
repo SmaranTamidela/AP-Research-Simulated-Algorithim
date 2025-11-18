@@ -43,20 +43,21 @@ videos.forEach(v => {
   videoMetrics.set(v.src, { watchedPercent: 0, liked: false, favorited: false });
 });
 
-// ---------- LOGGING TO SHEETS ----------
+// ---------- LOGGING VIA GOOGLE FORM ----------
 function logEngagementToSheets(videoObj, metrics) {
-  fetch("https://script.google.com/macros/s/AKfycbyuiI-6ro1iHIoIGzseetgNjrTj4Tc9BjQZcyVdZagZRjMgXZDZpS271fxaFcvrfioG/exec", {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({
-      src: videoObj.src,
-      category: videoObj.category,
-      username: videoObj.username,
-      liked: metrics.liked,
-      favorited: metrics.favorited,
-      watchedPercent: metrics.watchedPercent
-    })
-  });
+  const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdmea6YMKZau6NeXdFMKDdIxQCYGKPv6B1g_jRt7q2qcoCm2w/formResponse"; // replace with your Google Form "formResponse" URL
+  const formData = new FormData();
+
+  // Replace entry.xxxxx with the correct entry IDs from your form
+  formData.append("entry.482490268", videoObj.src);
+  formData.append("entry.217370630", videoObj.category);
+  formData.append("entry.1185885436", videoObj.username);
+  formData.append("entry.1545419799", metrics.liked);
+  formData.append("entry.1709060786", metrics.favorited);
+  formData.append("entry.2075199488", metrics.watchedPercent);
+
+  // Submit via POST without fetch (avoids CORS)
+  navigator.sendBeacon(formURL, formData);
 }
 
 function randomUnplayedVideo() {
