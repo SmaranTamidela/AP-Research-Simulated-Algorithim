@@ -105,4 +105,4 @@ function initPartialFeed(){
   });
 }
 
-initPartialFeed();
+initPartialFeed(); 
