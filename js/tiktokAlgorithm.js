@@ -141,7 +141,7 @@ function createVideoCard(videoObj) {
 
 // --- Function to POST engagement data to Google Sheet ---
 function logEngagementToSheet(videoObj, metrics) {
-  fetch("https://script.google.com/macros/s/AKfycbzGY9RdjsTk5xvxgkWqW8J_dQIBpgCyPY2kZzozwsEo_VN6_3KJZ5xrSF7xIwMNbUE0/exec", {
+  fetch("hhttps://script.google.com/macros/s/AKfycbxoqEj1Zpapkb7AQTBTvk_nO1gXWnbo6A1M3T_wcu4/dev", {
     method: "POST",
     body: JSON.stringify({
       src: videoObj.src,
