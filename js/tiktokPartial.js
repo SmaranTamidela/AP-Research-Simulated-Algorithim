@@ -88,7 +88,8 @@ function chooseNextVideo(currentCategory) {
 }
 
 // -------------------- LOGGING TO GOOGLE FORM --------------------
-const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdmea6YMKZau6NeXdFMKDdIxQCYGKPv6B1g_jRt7q2qcoCm2w/viewform"; // replace
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSep9V79mQOkMJcaTtFfMqctqqKQmfjkajuLUdtIlbhxHjGY2A/formResponse
+"; // replace
 const ENTRY_IDS = {
   src: "entry.2042513432",
   category: "entry.1069451717Y",
