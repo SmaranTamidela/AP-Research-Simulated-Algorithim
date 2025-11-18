@@ -40,8 +40,13 @@ const playedVideos = new Set();
 const videoMetrics = new Map();
 videos.forEach(v=>{ sessionCategoryScores[v.category]=0; videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false}); });
 
-function randomUnplayedVideo(){ const unplayed = videos.filter(v=>!playedVideos.has(v.src)); if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} return unplayed[Math.floor(Math.random()*unplayed.length)]; }
+function randomUnplayedVideo(){ 
+  const unplayed = videos.filter(v=>!playedVideos.has(v.src)); 
+  if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} 
+  return unplayed[Math.floor(Math.random()*unplayed.length)]; 
+}
 function scoreFromMetrics(metrics){ return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
+
 function chooseNextVideo(currentCategory){
   if(!recommendationMap[currentCategory]) return randomUnplayedVideo();
   const levels=["high","moderate","low"],candidateCats=[];
@@ -53,7 +58,7 @@ function chooseNextVideo(currentCategory){
 }
 
 function logEngagement(data){
-  fetch("https://script.google.com/macros/s/AKfycbyX8SIuYciVn0SMCRLHlKaZ1sQGSIRSGm2xqDKxpK4RkStpl9C0AheyOrKqeaefoFQkJA/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbzGlnQLPJVEfGwAK3v4E9P1OSJHyx0nSNRYgIgIp1jTpj5LEi5vst129xsLtE_jH5So/exec", {
     method: "POST",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify(data)
