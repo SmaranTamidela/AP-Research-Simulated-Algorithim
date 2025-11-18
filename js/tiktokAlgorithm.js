@@ -171,6 +171,6 @@ function initOpaqueFeed() {
       current = next;
     }
   });
-}
+} 
 
 initOpaqueFeed();
