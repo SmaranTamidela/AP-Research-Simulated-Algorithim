@@ -8,7 +8,7 @@
 <body>
   <div id="feedContainer"></div>
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase SDKs (compat version) -->
   <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-database-compat.js"></script>
 
@@ -26,10 +26,10 @@
 
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
-    window.database = firebase.database(); // so your tiktokPartial.js can use it
+    window.database = firebase.database(); // make DB accessible to JS
   </script>
 
-  <!-- Your TikTok Partial JS -->
-  <script type="module" src="js/tiktokPartial.js"></script>
+  <!-- TikTok Partial JS (regular script, not module) -->
+  <script src="js/tiktokPartial.js"></script>
 </body>
 </html>
