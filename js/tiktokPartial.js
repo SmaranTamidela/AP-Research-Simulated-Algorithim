@@ -87,31 +87,21 @@ function chooseNextVideo(currentCategory) {
   return unplayed.length ? unplayed[Math.floor(Math.random() * unplayed.length)] : randomUnplayedVideo();
 }
 
-// -------------------- LOGGING TO GOOGLE FORM --------------------
-const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSep9V79mQOkMJcaTtFfMqctqqKQmfjkajuLUdtIlbhxHjGY2A/formResponse
-"; // replace
-const ENTRY_IDS = {
+function logEngagementToSheets(videoObj, metrics) {
+  const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSep9V79mQOkMJcaTtFfMqctqqKQmfjkajuLUdtIlbhxHjGY2A/formResponse"; // replace with your Google Form "formResponse" URL
+  const formData = new FormData();
+
+  // Replace entry.xxxxx with the correct entry IDs from your form
   src: "entry.2042513432",
   category: "entry.1069451717Y",
   username: "entry.1558797441",
   liked: "entry.1710546849",
   favorited: "entry.1832054697",
   watchedPercent: "entry.2112114283"
+    
+  navigator.sendBeacon(formURL, formData);
 };
 
-function logEngagementToForm(videoObj, metrics) {
-  const data = new URLSearchParams();
-  data.append(ENTRY_IDS.src, videoObj.src);
-  data.append(ENTRY_IDS.category, videoObj.category);
-  data.append(ENTRY_IDS.username, videoObj.username);
-  data.append(ENTRY_IDS.liked, metrics.liked);
-  data.append(ENTRY_IDS.favorited, metrics.favorited);
-  // Round to nearest 25%
-  const watchedRounded = Math.round(metrics.watchedPercent / 25) * 25;
-  data.append(ENTRY_IDS.watchedPercent, watchedRounded);
-
-  fetch(FORM_URL, { method: "POST", body: data });
-}
 
 // -------------------- VIDEO CARD --------------------
 function createVideoCardPartial(videoObj) {
