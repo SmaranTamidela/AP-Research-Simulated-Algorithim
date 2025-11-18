@@ -1,13 +1,4 @@
 // js/tiktokFull.js
-// Make sure you have Firebase initialized in your HTML with:
-// <script type="module">
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-// import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
-// const firebaseConfig = { /* your config */ };
-// const app = initializeApp(firebaseConfig);
-// window.database = getDatabase(app);
-// </script>
-
 const recommendationMap = {
   "earth": { high: ["science","technology"], moderate: ["travel","animal"], low: ["art","knitting"] },
   "food":  { high: ["travel","party"], moderate: ["science","technology"], low: ["knitting","art"] },
@@ -47,36 +38,35 @@ const videos = [
 const sessionCategoryScores = {};
 const playedVideos = new Set();
 const videoMetrics = new Map();
-videos.forEach(v => { 
-  sessionCategoryScores[v.category] = 0; 
-  videoMetrics.set(v.src, {watchedPercent:0, liked:false, favorited:false}); 
+videos.forEach(v=>{ 
+  sessionCategoryScores[v.category]=0; 
+  videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false}); 
 });
 
-// --- Firebase logging ---
-function logEngagement(data) {
-  if (!window.database) return console.error("Firebase not initialized");
-  const db = window.database;
-  const engagementsRef = firebaseDatabaseRef(db, 'engagements');
-  push(engagementsRef, {
-    timestamp: new Date().toISOString(),
-    src: data.src,
-    category: data.category,
-    watchedPercent: data.watchedPercent,
-    liked: data.liked,
-    favorited: data.favorited,
-    username: data.username || "",
-    caption: data.caption || ""
-  }).catch(err => console.error("Logging failed:", err));
+// Firebase logging helper
+function logEngagement(videoObj, metrics) {
+  if (!window.database) return;
+  const ref = window.database.ref('engagementData');
+  ref.push({
+    src: videoObj.src,
+    category: videoObj.category,
+    username: videoObj.username,
+    caption: videoObj.caption,
+    watchedPercent: metrics.watchedPercent,
+    liked: metrics.liked,
+    favorited: metrics.favorited,
+    timestamp: Date.now()
+  });
 }
 
-function randomUnplayedVideo() { 
+function randomUnplayedVideo(){ 
   const unplayed = videos.filter(v=>!playedVideos.has(v.src)); 
-  if (unplayed.length===0){ playedVideos.clear(); return videos[Math.floor(Math.random()*videos.length)];} 
+  if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} 
   return unplayed[Math.floor(Math.random()*unplayed.length)]; 
 }
-
-function scoreFromMetrics(metrics){ return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
-
+function scoreFromMetrics(metrics){ 
+  return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); 
+}
 function chooseNextVideo(currentCategory){
   if(!recommendationMap[currentCategory]) return randomUnplayedVideo();
   const levels=["high","moderate","low"],candidateCats=[];
@@ -91,7 +81,6 @@ function createVideoCardFull(videoObj) {
   const card = document.createElement("div"); 
   card.className="video-card";
 
-  // video
   const vid = document.createElement("video");
   vid.src = videoObj.src;
   vid.controls=false;
@@ -105,21 +94,20 @@ function createVideoCardFull(videoObj) {
     if(vid.duration>0) {
       metrics.watchedPercent = Math.min(100,(vid.currentTime/vid.duration)*100);
       if(!counted25 && metrics.watchedPercent>=25) { counted25=true; }
-      logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption});
     }
   });
 
   vid.addEventListener("ended",()=>{
     sessionCategoryScores[videoObj.category]=(sessionCategoryScores[videoObj.category]||0)+scoreFromMetrics(metrics);
     playedVideos.add(videoObj.src);
-    logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption});
+    logEngagement(videoObj, metrics); // <-- log to Firebase
   });
 
   const actions=document.createElement("div");actions.className="actions";
   const likeBtn=document.createElement("div");likeBtn.className="action-btn";likeBtn.innerHTML="❤";
-  likeBtn.onclick=()=>{metrics.liked=!metrics.liked;likeBtn.classList.toggle("liked",metrics.liked); updateExp(); logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption}); };
+  likeBtn.onclick=()=>{metrics.liked=!metrics.liked;likeBtn.classList.toggle("liked",metrics.liked); logEngagement(videoObj, metrics); updateExp(); };
   const favBtn=document.createElement("div");favBtn.className="action-btn";favBtn.innerHTML="★";
-  favBtn.onclick=()=>{metrics.favorited=!metrics.favorited;favBtn.classList.toggle("favorited",metrics.favorited); updateExp(); logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption}); };
+  favBtn.onclick=()=>{metrics.favorited=!metrics.favorited;favBtn.classList.toggle("favorited",metrics.favorited); logEngagement(videoObj, metrics); updateExp(); };
   const favText=document.createElement("div");favText.className="favorite-label";favText.textContent="Favorite";
   actions.appendChild(likeBtn);actions.appendChild(favBtn);actions.appendChild(favText);
 
@@ -129,7 +117,6 @@ function createVideoCardFull(videoObj) {
   card.appendChild(captionBox);
 
   const expBox=document.createElement("div");expBox.className="explanation-box";
-
   function updateExp(){
     let topCats = Object.entries(sessionCategoryScores).sort((a,b)=>b[1]-a[1]).slice(0,2);
     const messages = topCats.map(c=>{
