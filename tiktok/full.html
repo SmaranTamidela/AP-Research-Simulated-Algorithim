@@ -29,6 +29,31 @@
   // Make it accessible to your other scripts
   window.database = database;
 </script>
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+  import { getDatabase, ref as firebaseDatabaseRef, push } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+
+  // Your Firebase config (replace with your actual project config if different)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDY9k4h5_6WoeN5RD6Gxgy2ZZUwBo5VZxc",
+    authDomain: "ap-research-engagement-data.firebaseapp.com",
+    projectId: "ap-research-engagement-data",
+    storageBucket: "ap-research-engagement-data.firebasestorage.app",
+    messagingSenderId: "380485529410",
+    appId: "1:380485529410:web:5969cf7acb9038c07722db",
+    measurementId: "G-YQK1WPQD3Y"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  window.database = getDatabase(app);
+
+  console.log("Firebase initialized for engagement logging");
+</script>
+
+<!-- Your TikTok feed script -->
+<script type="module" src="./js/tiktokFull.js"></script>
 
   <div class="app-container">
     <div id="feedContainer" class="feed"></div>
