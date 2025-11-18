@@ -117,17 +117,26 @@ function createVideoCard(videoObj) {
   vid.muted = true;
 
   const metrics = videoMetrics.get(videoObj.src);
+  const loggedPercents = new Set();
 
   vid.addEventListener("timeupdate", () => {
     if (vid.duration > 0) {
       metrics.watchedPercent = Math.min(100, (vid.currentTime / vid.duration) * 100);
+
+      // Check for 25% increments
+      const percentChunk = Math.floor(metrics.watchedPercent / 25) * 25;
+      if (!loggedPercents.has(percentChunk) && percentChunk > 0) {
+        loggedPercents.add(percentChunk);
+        logEngagementToSheets(videoObj, { ...metrics }); // log current metrics
+      }
     }
   });
 
   vid.addEventListener("ended", () => {
     sessionCategoryScores[videoObj.category] += scoreFromMetrics(metrics);
     playedVideos.add(videoObj.src);
-    logEngagementToSheets(videoObj, metrics);
+    // Log final metrics at 100%
+    if (!loggedPercents.has(100)) logEngagementToSheets(videoObj, { ...metrics });
   });
 
   const actions = document.createElement("div");
@@ -167,6 +176,7 @@ function createVideoCard(videoObj) {
 
   return card;
 }
+
 
 function initOpaqueFeed() {
   const feed = document.getElementById("feedContainer");
