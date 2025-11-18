@@ -41,7 +41,7 @@ videos.forEach(v=>{ sessionCategoryScores[v.category]=0; videoMetrics.set(v.src,
 
 // ---------- LOGGING FUNCTION ----------
 function logEngagementToSheets(videoObj, metrics) {
-  fetch("YOUR_WEB_APP_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbyuiI-6ro1iHIoIGzseetgNjrTj4Tc9BjQZcyVdZagZRjMgXZDZpS271fxaFcvrfioG/exec", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
