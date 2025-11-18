@@ -115,10 +115,24 @@ function createVideoCardFull(videoObj){
   captionBox.innerHTML=`<div class="username">${videoObj.username}</div>${videoObj.caption}`;
 
   const expBox=document.createElement("div");expBox.className="explanation-box";
-  function updateExp(){
-    const topCats=Object.entries(sessionCategoryScores).sort((a,b)=>b[1]-a[1]).slice(0,2);
-    expBox.textContent=topCats.map(c=>metrics.liked||metrics.favorited?`You have favorited or liked videos related to ${c[0]}`:`You have watched videos related to ${c[0]}`).join("\n");
-  }
+function updateExp() {
+  // Sort categories by score descending
+  const topCats = Object.entries(sessionCategoryScores)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 2); // top 2 categories
+
+  // Build messages for top categories
+  const messages = topCats.map(c => {
+    const catName = c[0];
+    const score = c[1];
+    if (score === 0) return null; // ignore categories with 0
+    return `You have engaged with videos related to ${catName}`;
+  }).filter(Boolean); // remove nulls
+
+  // Display messages, or fallback if none yet
+  expBox.textContent = messages.length ? messages.join("\n") : "You have not engaged with any categories yet.";
+}
+
 
   card.appendChild(vid);card.appendChild(actions);card.appendChild(expBox);card.appendChild(captionBox);
   vid.addEventListener("timeupdate", updateExp);
