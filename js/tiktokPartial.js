@@ -38,15 +38,21 @@ const videos = [
 const sessionCategoryScores = {};
 const playedVideos = new Set();
 const videoMetrics = new Map();
-videos.forEach(v=>{ sessionCategoryScores[v.category]=0; videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false}); });
+videos.forEach(v=>{
+  sessionCategoryScores[v.category]=0;
+  videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false});
+});
 
-function randomUnplayedVideo(){ 
-  const unplayed = videos.filter(v=>!playedVideos.has(v.src)); 
-  if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} 
-  return unplayed[Math.floor(Math.random()*unplayed.length)]; 
+// -------------------- ADD THIS --------------------
+function logEngagement(data){
+  if(!window.database) return;
+  const dbRef = firebaseDatabaseRef(window.database, "engagements");
+  push(dbRef, {...data, timestamp: Date.now()});
 }
-function scoreFromMetrics(metrics){ return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
+// -------------------------------------------------
 
+function randomUnplayedVideo(){ const unplayed = videos.filter(v=>!playedVideos.has(v.src)); if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} return unplayed[Math.floor(Math.random()*unplayed.length)]; }
+function scoreFromMetrics(metrics){ return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
 function chooseNextVideo(currentCategory){
   if(!recommendationMap[currentCategory]) return randomUnplayedVideo();
   const levels=["high","moderate","low"],candidateCats=[];
@@ -57,19 +63,11 @@ function chooseNextVideo(currentCategory){
   const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&v.category===bestCategory);return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();
 }
 
-function logEngagement(data){
-  fetch("https://script.google.com/macros/s/AKfycbzGlnQLPJVEfGwAK3v4E9P1OSJHyx0nSNRYgIgIp1jTpj5LEi5vst129xsLtE_jH5So/exec", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify(data)
-  }).catch(err=>console.error("Logging failed:",err));
-}
-
 function createVideoCardPartial(videoObj){
   const card=document.createElement("div");card.className="video-card";
   const vid=document.createElement("video");vid.src=videoObj.src;vid.controls=false;vid.autoplay=true;vid.loop=false;vid.muted=true;
+
   const metrics=videoMetrics.get(videoObj.src);
-  
   vid.addEventListener("timeupdate",()=>{if(vid.duration>0){metrics.watchedPercent=Math.min(100,(vid.currentTime/vid.duration)*100);}});
 
   vid.addEventListener("ended",()=>{
@@ -80,15 +78,36 @@ function createVideoCardPartial(videoObj){
 
   const actions=document.createElement("div");actions.className="actions";
   const likeBtn=document.createElement("div");likeBtn.className="action-btn";likeBtn.innerHTML="❤";
-  likeBtn.onclick=()=>{metrics.liked=!metrics.liked;likeBtn.classList.toggle("liked",metrics.liked); logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption}); };
+  likeBtn.onclick=()=>{
+    metrics.liked=!metrics.liked; 
+    likeBtn.classList.toggle("liked",metrics.liked); 
+    logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption});
+    updateExp(); 
+  };
   const favBtn=document.createElement("div");favBtn.className="action-btn";favBtn.innerHTML="★";
-  favBtn.onclick=()=>{metrics.favorited=!metrics.favorited;favBtn.classList.toggle("favorited",metrics.favorited); logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption}); };
+  favBtn.onclick=()=>{
+    metrics.favorited=!metrics.favorited; 
+    favBtn.classList.toggle("favorited",metrics.favorited); 
+    logEngagement({...metrics, src: videoObj.src, category: videoObj.category, username: videoObj.username, caption: videoObj.caption});
+    updateExp(); 
+  };
   const favText=document.createElement("div");favText.className="favorite-label";favText.textContent="Favorite";
   actions.appendChild(likeBtn);actions.appendChild(favBtn);actions.appendChild(favText);
 
   const captionBox=document.createElement("div");captionBox.className="caption-box";captionBox.innerHTML=`<div class="username">${videoObj.username}</div>${videoObj.caption}`;
 
-  card.appendChild(vid);card.appendChild(actions);card.appendChild(captionBox);
+  const expBox=document.createElement("div");expBox.className="explanation-box";
+
+  function updateExp(){
+    if(Math.random() < 0.5){
+      expBox.textContent = "You may like this video based on your recent activity.";
+      return;
+    }
+  }
+
+  card.appendChild(vid);card.appendChild(actions);card.appendChild(expBox);card.appendChild(captionBox);
+  vid.addEventListener("timeupdate", updateExp);
+  updateExp();
 
   return card;
 }
