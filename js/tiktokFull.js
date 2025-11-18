@@ -38,18 +38,34 @@ const videos = [
 const sessionCategoryScores = {};
 const playedVideos = new Set();
 const videoMetrics = new Map();
-videos.forEach(v=>{ sessionCategoryScores[v.category]=0; videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false}); });
+videos.forEach(v=>{
+  sessionCategoryScores[v.category]=0; 
+  videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false});
+});
 
-function randomUnplayedVideo(){ const unplayed = videos.filter(v=>!playedVideos.has(v.src)); if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} return unplayed[Math.floor(Math.random()*unplayed.length)]; }
-function scoreFromMetrics(metrics){ return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
+function randomUnplayedVideo(){ 
+  const unplayed = videos.filter(v=>!playedVideos.has(v.src)); 
+  if(unplayed.length===0){playedVideos.clear();return videos[Math.floor(Math.random()*videos.length)];} 
+  return unplayed[Math.floor(Math.random()*unplayed.length)]; 
+}
+
+function scoreFromMetrics(metrics){ 
+  return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); 
+}
+
 function chooseNextVideo(currentCategory){
   if(!recommendationMap[currentCategory]) return randomUnplayedVideo();
   const levels=["high","moderate","low"],candidateCats=[];
   levels.forEach(l=>{const arr=recommendationMap[currentCategory][l];if(Array.isArray(arr)) arr.forEach(c=>{if(!candidateCats.includes(c))candidateCats.push(c);});});
   let bestCategory=null,bestScore=-Infinity;
   candidateCats.forEach(cat=>{const key=cat.toLowerCase(),score=sessionCategoryScores[key]||0;if(score>bestScore){bestScore=score;bestCategory=key;}});
-  if(!bestCategory||bestScore<=0){const setCand=new Set(candidateCats.map(c=>c.toLowerCase()));const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&setCand.has(v.category));return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();}
-  const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&v.category===bestCategory);return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();
+  if(!bestCategory||bestScore<=0){
+    const setCand=new Set(candidateCats.map(c=>c.toLowerCase()));
+    const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&setCand.has(v.category));
+    return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();
+  }
+  const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&v.category===bestCategory);
+  return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();
 }
 
 function createVideoCardFull(videoObj) {
@@ -64,29 +80,48 @@ function createVideoCardFull(videoObj) {
   vid.muted=true;
 
   const metrics = videoMetrics.get(videoObj.src);
-  let counted25=false;
+  const milestones = [25,50,75,100];
+  const hitMilestones = new Set();
+
   vid.addEventListener("timeupdate", () => {
-    if(vid.duration>0) {
-      metrics.watchedPercent = Math.min(100,(vid.currentTime/vid.duration)*100);
-      if(!counted25 && metrics.watchedPercent>=25) { counted25=true; }
+    if(vid.duration > 0) {
+      metrics.watchedPercent = Math.min(100, (vid.currentTime/vid.duration)*100);
+
+      milestones.forEach(ms => {
+        if(metrics.watchedPercent >= ms && !hitMilestones.has(ms)){
+          hitMilestones.add(ms);
+          // log milestone
+          if(window.database){
+            window.database.ref("fullEngagement").push({
+              video: videoObj.src,
+              category: videoObj.category,
+              watchedPercent: ms,
+              liked: metrics.liked,
+              favorited: metrics.favorited,
+              milestone: ms,
+              timestamp: Date.now()
+            });
+          }
+        }
+      });
     }
   });
-
-  function logEngagement() {
-    firebase.database().ref("engagementData").push({
-      video: videoObj.src,
-      category: videoObj.category,
-      watchedPercent: metrics.watchedPercent,
-      liked: metrics.liked,
-      favorited: metrics.favorited,
-      timestamp: Date.now()
-    });
-  }
 
   vid.addEventListener("ended",()=>{
     sessionCategoryScores[videoObj.category]=(sessionCategoryScores[videoObj.category]||0)+scoreFromMetrics(metrics);
     playedVideos.add(videoObj.src);
-    logEngagement(); // log when video ends
+
+    if(window.database){
+      window.database.ref("fullEngagement").push({
+        video: videoObj.src,
+        category: videoObj.category,
+        watchedPercent: 100,
+        liked: metrics.liked,
+        favorited: metrics.favorited,
+        milestone: "ended",
+        timestamp: Date.now()
+      });
+    }
   });
 
   const actions=document.createElement("div");actions.className="actions";
@@ -95,23 +130,19 @@ function createVideoCardFull(videoObj) {
     metrics.liked=!metrics.liked;
     likeBtn.classList.toggle("liked",metrics.liked);
     updateExp();
-    logEngagement(); // log when liked
   };
   const favBtn=document.createElement("div");favBtn.className="action-btn";favBtn.innerHTML="★";
   favBtn.onclick=()=>{
     metrics.favorited=!metrics.favorited;
     favBtn.classList.toggle("favorited",metrics.favorited);
     updateExp();
-    logEngagement(); // log when favorited
   };
   const favText=document.createElement("div");favText.className="favorite-label";favText.textContent="Favorite";
   actions.appendChild(likeBtn);actions.appendChild(favBtn);actions.appendChild(favText);
 
-  const captionBox = document.createElement("div");
-  captionBox.className = "caption-box";
+  const captionBox = document.createElement("div");captionBox.className = "caption-box";
   captionBox.innerHTML = `<div class="username">${videoObj.username}</div>${videoObj.caption}`;
-  card.appendChild(captionBox);
-
+  
   const expBox=document.createElement("div");expBox.className="explanation-box";
 
   function updateExp(){
@@ -123,18 +154,25 @@ function createVideoCardFull(videoObj) {
     expBox.textContent = messages.join("\n");
   }
 
-  card.appendChild(vid);card.appendChild(actions);card.appendChild(expBox);
+  card.appendChild(vid);
+  card.appendChild(actions);
+  card.appendChild(expBox);
+  card.appendChild(captionBox);
+
   vid.addEventListener("timeupdate", updateExp);
   updateExp();
+
   return card;
 }
 
 function initFullFeed(){
   const feed=document.getElementById("feedContainer");
-  const start=randomUnplayedVideo();playedVideos.add(start.src);feed.appendChild(createVideoCardFull(start));
+  const start=randomUnplayedVideo();
+  playedVideos.add(start.src);
+  feed.appendChild(createVideoCardFull(start));
   let current=start;
   window.addEventListener("scroll",()=>{
-    if(window.innerHeight+window.scrollY>=document.body.offsetHeight-180){
+    if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 180){
       const next=chooseNextVideo(current.category);
       playedVideos.add(next.src);
       feed.appendChild(createVideoCardFull(next));
