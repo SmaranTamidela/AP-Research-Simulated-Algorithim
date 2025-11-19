@@ -135,12 +135,12 @@ function createVideoCardPartial(videoObj){
 
   const favBtn = document.createElement("div"); 
   favBtn.className = "action-btn"; 
-  favBtn.innerHTML = "★";
+  favBtn.innerHTML = "➤";
   favBtn.onclick = () => { metrics.favorited = !metrics.favorited; favBtn.classList.toggle("favorited", metrics.favorited); updateExp(); };
 
   const favText = document.createElement("div"); 
   favText.className = "favorite-label"; 
-  favText.textContent = "Favorite";
+  favText.textContent = "Repost";
 
   actions.appendChild(likeBtn); 
   actions.appendChild(favBtn); 
