@@ -83,28 +83,33 @@ function createVideoCardFull(videoObj){
   const vid=document.createElement("video"); vid.src=videoObj.src; vid.controls=false; vid.autoplay=true; vid.loop=false; vid.muted=true;
 
   const metrics=videoMetrics.get(videoObj.src);
-
   const expBox=document.createElement("div"); expBox.className="explanation-box";
 
-  function updateExp(){
-    // top 2 engaged categories excluding current video category
+  function updateExp() {
+    // Top 2 engaged categories excluding current
     let sortedCats = Object.entries(sessionCategoryScores)
       .filter(([cat]) => cat !== videoObj.category)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 2);
 
-    const X = sortedCats[0] ? sortedCats[0][0] : videoObj.category;
-    const Y = sortedCats[1] ? sortedCats[1][0] : videoObj.category;
     const Z = videoObj.category;
+    const connectedCats = [];
 
-    // Check if current video category (Z) is in the recommendation map of X or Y
-    const connectsToX = recommendationMap[X]?.high.includes(Z) || recommendationMap[X]?.moderate.includes(Z) || recommendationMap[X]?.low.includes(Z);
-    const connectsToY = recommendationMap[Y]?.high.includes(Z) || recommendationMap[Y]?.moderate.includes(Z) || recommendationMap[Y]?.low.includes(Z);
+    sortedCats.forEach(([cat]) => {
+      const map = recommendationMap[cat];
+      if (map && (map.high.includes(Z) || map.moderate.includes(Z) || map.low.includes(Z))) {
+        connectedCats.push(cat);
+      }
+    });
 
-    expBox.textContent = `This video was recommended to you because you showed high engagement in ${X} videos${connectsToX ? '' : ' (unrelated)'} and ${Y} videos${connectsToY ? '' : ' (unrelated)'} which connects to ${Z} videos.`;
+    if (connectedCats.length > 0) {
+      expBox.textContent = `This video was recommended to you because you showed high engagement in ${connectedCats.join(" and ")} videos which connects to ${Z} videos.`;
+    } else {
+      expBox.textContent = `This video is part of our feed and may interest you.`;
+    }
   }
 
-  // timeupdate for watchedPercent and incremental logging
+  // Timeupdate for watchedPercent and incremental logging
   vid.addEventListener("timeupdate", ()=>{
     if(vid.duration>0){
       const percent = Math.floor((vid.currentTime/vid.duration)*100);
@@ -118,7 +123,7 @@ function createVideoCardFull(videoObj){
     updateExp();
   });
 
-  // ended event: final log
+  // Ended event: final log
   vid.addEventListener("ended", ()=>{
     sessionCategoryScores[videoObj.category] += scoreFromMetrics(metrics);
     playedVideos.add(videoObj.src);
