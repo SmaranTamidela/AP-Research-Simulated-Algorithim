@@ -1,1 +1,132 @@
+/* instagram.css */
+
+/* Reset & base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  line-height: 1.4;
+}
+
+/* Feed container */
+#feedContainer {
+  max-width: 600px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 10px;
+  background-color: #fafafa;
+}
+
+/* Video card */
+.video-card {
+  background-color: #fff;
+  border: 1px solid #dbdbdb;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.1s;
+}
+
+.video-card:hover {
+  transform: scale(1.01);
+}
+
+/* Video element */
+.video-card video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 1px solid #dbdbdb;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Actions container */
+.actions {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 12px;
+}
+
+/* Like and favorite buttons */
+.action-btn {
+  cursor: pointer;
+  font-size: 20px;
+  transition: transform 0.1s;
+  user-select: none;
+}
+
+.action-btn:hover {
+  transform: scale(1.2);
+}
+
+/* Liked & favorited states */
+.liked {
+  color: #ed4956;
+}
+
+.favorited {
+  color: #facc15;
+}
+
+/* Favorite label */
+.favorite-label {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Caption box */
+.caption-box {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+/* Username styling */
+.username {
+  font-weight: bold;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Explanation box for partial/opaque feeds */
+.explanation-box {
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #262626;
+  background-color: #f0f0f0;
+  border-top: 1px solid #dbdbdb;
+  border-bottom: 1px solid #dbdbdb;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  #feedContainer {
+    padding: 0 5px;
+  }
+
+  .actions {
+    padding: 6px 8px;
+    gap: 8px;
+  }
+
+  .action-btn {
+    font-size: 18px;
+  }
+
+  .caption-box {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .explanation-box {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}
 
