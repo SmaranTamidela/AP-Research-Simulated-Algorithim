@@ -95,30 +95,19 @@ function createVideoCardPartial(videoObj){
   expBox.className = "explanation-box";
 
   // ---------- UPDATED updateExp ----------
-  function updateExp() {
-    if (!metrics.showExp) {
-      expBox.textContent = "";
-      return;
-    }
-
-    const X = videoObj.category;
-
-    const rec = recommendationMap[X];
-    if (!rec) {
-      expBox.textContent = `We recommended this video relating to ${X} based on your activity.`;
-      return;
-    }
-
-    const highCats = rec.high || [];
-    const moderateCats = rec.moderate || [];
-    const allCats = [...highCats, ...moderateCats];
-
-    const shuffled = allCats.sort(() => 0.5 - Math.random());
-    const Y = shuffled[0] || "";
-    const Z = shuffled[1] || "";
-
-    expBox.textContent = `We recommended this video relating to ${X} because you have shown high engagement in videos related to ${Y} and ${Z}.`;
+function updateExp() {
+  // only show explanation if this video was chosen to show it
+  if (!metrics.showExp) {
+    expBox.textContent = "";
+    return;
   }
+
+  const X = videoObj.category; // category of the current video
+
+  // simple, static message
+  expBox.textContent = `This video is recommended to you because you showed high engagement to videos related to ${X}.`;
+}
+
   // ---------- END updateExp ----------
 
   vid.addEventListener("timeupdate", () => {
