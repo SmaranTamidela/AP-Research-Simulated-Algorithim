@@ -79,18 +79,53 @@ function chooseNextVideo(currentCategory){
 
 // ---------- VIDEO CARD CREATION ----------
 function createVideoCardPartial(videoObj){
-  const card=document.createElement("div"); card.className="video-card";
-  const vid=document.createElement("video"); vid.src=videoObj.src; vid.controls=false; vid.autoplay=true; vid.loop=false; vid.muted=true;
+  const card = document.createElement("div"); 
+  card.className = "video-card";
 
-  const metrics=videoMetrics.get(videoObj.src);
+  const vid = document.createElement("video"); 
+  vid.src = videoObj.src; 
+  vid.controls = false; 
+  vid.autoplay = true; 
+  vid.loop = false; 
+  vid.muted = true;
 
-  // timeupdate for watchedPercent and incremental logging
-  vid.addEventListener("timeupdate", ()=>{
+  const metrics = videoMetrics.get(videoObj.src);
+
+  const expBox = document.createElement("div"); 
+  expBox.className = "explanation-box";
+
+  // ---------- UPDATED updateExp ----------
+  function updateExp() {
+    if (!metrics.showExp) {
+      expBox.textContent = "";
+      return;
+    }
+
+    const X = videoObj.category;
+
+    const rec = recommendationMap[X];
+    if (!rec) {
+      expBox.textContent = `We recommended this video relating to ${X} based on your activity.`;
+      return;
+    }
+
+    const highCats = rec.high || [];
+    const moderateCats = rec.moderate || [];
+    const allCats = [...highCats, ...moderateCats];
+
+    const shuffled = allCats.sort(() => 0.5 - Math.random());
+    const Y = shuffled[0] || "";
+    const Z = shuffled[1] || "";
+
+    expBox.textContent = `We recommended this video relating to ${X} because you have shown high engagement in videos related to ${Y} and ${Z}.`;
+  }
+  // ---------- END updateExp ----------
+
+  vid.addEventListener("timeupdate", () => {
     if(vid.duration>0){
       const percent = Math.floor((vid.currentTime/vid.duration)*100);
       metrics.watchedPercent = percent;
 
-      // log at increments of 25%
       if(percent - metrics.lastLogged >= 25){
         metrics.lastLogged = percent;
         logEngagementToSheets(videoObj, metrics, "Partial");
@@ -99,58 +134,50 @@ function createVideoCardPartial(videoObj){
     updateExp();
   });
 
-  // ended event: final log
-  vid.addEventListener("ended", ()=>{
-    sessionCategoryScores[videoObj.category] += scoreFromMetrics(metrics);
+  vid.addEventListener("ended", () => {
+    sessionCategoryScores[videoObj.category] += (metrics.favorited ? 2 : 0) + (metrics.liked ? 1 : 0) + (metrics.watchedPercent / 100);
     playedVideos.add(videoObj.src);
     logEngagementToSheets(videoObj, metrics, "Partial");
   });
 
-  const actions=document.createElement("div"); actions.className="actions";
-  const likeBtn=document.createElement("div"); likeBtn.className="action-btn"; likeBtn.innerHTML="❤";
-  likeBtn.onclick=()=>{metrics.liked=!metrics.liked; likeBtn.classList.toggle("liked",metrics.liked); updateExp(); };
-  const favBtn=document.createElement("div"); favBtn.className="action-btn"; favBtn.innerHTML="★";
-  favBtn.onclick=()=>{metrics.favorited=!metrics.favorited; favBtn.classList.toggle("favorited",metrics.favorited); updateExp(); };
-  const favText=document.createElement("div"); favText.className="favorite-label"; favText.textContent="Favorite";
-  actions.appendChild(likeBtn); actions.appendChild(favBtn); actions.appendChild(favText);
+  const actions = document.createElement("div"); 
+  actions.className = "actions";
 
-  const captionBox=document.createElement("div"); captionBox.className="caption-box";
-  captionBox.innerHTML=`<div class="username">${videoObj.username}</div>${videoObj.caption}`;
+  const likeBtn = document.createElement("div"); 
+  likeBtn.className = "action-btn"; 
+  likeBtn.innerHTML = "❤";
+  likeBtn.onclick = () => {
+    metrics.liked = !metrics.liked; 
+    likeBtn.classList.toggle("liked", metrics.liked); 
+    updateExp(); 
+  };
 
-  const expBox=document.createElement("div"); expBox.className="explanation-box";
+  const favBtn = document.createElement("div"); 
+  favBtn.className = "action-btn"; 
+  favBtn.innerHTML = "★";
+  favBtn.onclick = () => {
+    metrics.favorited = !metrics.favorited; 
+    favBtn.classList.toggle("favorited", metrics.favorited); 
+    updateExp(); 
+  };
 
-function updateExp() {
-  // only show explanation if this video was chosen to show it
-  if (!metrics.showExp) {
-    expBox.textContent = "";
-    return;
-  }
+  const favText = document.createElement("div"); 
+  favText.className = "favorite-label"; 
+  favText.textContent = "Favorite";
 
-  const X = videoObj.category;
+  actions.appendChild(likeBtn); 
+  actions.appendChild(favBtn); 
+  actions.appendChild(favText);
 
-  // get the recommendation levels for this category
-  const rec = recommendationMap[X];
-  if (!rec) {
-    expBox.textContent = `We recommended this video relating to ${X} based on your activity.`;
-    return;
-  }
+  const captionBox = document.createElement("div"); 
+  captionBox.className = "caption-box";
+  captionBox.innerHTML = `<div class="username">${videoObj.username}</div>${videoObj.caption}`;
 
-  // pick categories for the message, randomizing between high and moderate
-  const highCats = rec.high || [];
-  const moderateCats = rec.moderate || [];
-  const allCats = [...highCats, ...moderateCats];
+  card.appendChild(vid); 
+  card.appendChild(actions); 
+  card.appendChild(expBox); 
+  card.appendChild(captionBox);
 
-  // shuffle and pick two categories
-  const shuffled = allCats.sort(() => 0.5 - Math.random());
-  const Y = shuffled[0] || "";
-  const Z = shuffled[1] || "";
-
-  expBox.textContent = `We recommended this video relating to ${X} because you have shown high engagement in videos related to ${Y} and ${Z}.`;
-}
-
-
-
-  card.appendChild(vid); card.appendChild(actions); card.appendChild(expBox); card.appendChild(captionBox);
   updateExp();
   return card;
 }
