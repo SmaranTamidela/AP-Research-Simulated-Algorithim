@@ -134,9 +134,9 @@ function createVideoCardFull(videoObj){
   const actions=document.createElement("div"); actions.className="actions";
   const likeBtn=document.createElement("div"); likeBtn.className="action-btn"; likeBtn.innerHTML="❤";
   likeBtn.onclick=()=>{metrics.liked=!metrics.liked; likeBtn.classList.toggle("liked",metrics.liked); updateExp(); };
-  const favBtn=document.createElement("div"); favBtn.className="action-btn"; favBtn.innerHTML="➤";
+  const favBtn=document.createElement("div"); favBtn.className="action-btn"; favBtn.innerHTML="★";
   favBtn.onclick=()=>{metrics.favorited=!metrics.favorited; favBtn.classList.toggle("favorited",metrics.favorited); updateExp(); };
-  const favText=document.createElement("div"); favText.className="favorite-label"; favText.textContent="Repost";
+  const favText=document.createElement("div"); favText.className="favorite-label"; favText.textContent="Favorite";
   actions.appendChild(likeBtn); actions.appendChild(favBtn); actions.appendChild(favText);
 
   const captionBox=document.createElement("div"); captionBox.className="caption-box";
