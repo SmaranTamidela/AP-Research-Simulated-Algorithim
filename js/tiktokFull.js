@@ -86,26 +86,26 @@ function createVideoCardFull(videoObj){
   const expBox=document.createElement("div"); expBox.className="explanation-box";
 
   function updateExp() {
-    // Top 2 engaged categories excluding current
-    let sortedCats = Object.entries(sessionCategoryScores)
-      .filter(([cat]) => cat !== videoObj.category)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 2);
-
     const Z = videoObj.category;
-    const connectedCats = [];
 
-    sortedCats.forEach(([cat]) => {
-      const map = recommendationMap[cat];
-      if (map && (map.high.includes(Z) || map.moderate.includes(Z) || map.low.includes(Z))) {
-        connectedCats.push(cat);
-      }
-    });
+    // Top engaged categories excluding current
+    const sortedCats = Object.entries(sessionCategoryScores)
+      .filter(([cat]) => cat !== Z)
+      .sort((a, b) => b[1] - a[1]);
+
+    // Only categories that connect via recommendationMap
+    const connectedCats = sortedCats
+      .map(([cat]) => cat)
+      .filter(cat => {
+        const map = recommendationMap[cat];
+        return map && (map.high.includes(Z) || map.moderate.includes(Z) || map.low.includes(Z));
+      })
+      .slice(0, 2);
 
     if (connectedCats.length > 0) {
       expBox.textContent = `This video was recommended to you because you showed high engagement in ${connectedCats.join(" and ")} videos which connects to ${Z} videos.`;
     } else {
-      expBox.textContent = `This video is part of our feed and may interest you.`;
+      expBox.textContent = "";
     }
   }
 
