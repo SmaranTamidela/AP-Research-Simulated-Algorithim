@@ -59,7 +59,7 @@ body {
 .action-btn:hover { transform: scale(1.15); }
 
 .liked { color: red !important; }
-.favorited { color: gold !important; }
+.favorited { color: blue !important; }
 
 .favorite-label {
   font-size: 12px;
