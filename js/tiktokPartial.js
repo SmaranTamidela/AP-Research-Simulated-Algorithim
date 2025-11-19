@@ -39,9 +39,9 @@ const sessionCategoryScores = {};
 const playedVideos = new Set();
 const videoMetrics = new Map();
 
-videos.forEach(v=>{
-  sessionCategoryScores[v.category]=0;
-  videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false,lastLogged:0});
+videos.forEach(v => {
+  sessionCategoryScores[v.category] = 0;
+  videoMetrics.set(v.src, { watchedPercent:0, liked:false, favorited:false, lastLogged:0 });
 });
 
 // ---------- LOGGING TO GOOGLE FORMS ----------
@@ -55,26 +55,26 @@ function logEngagementToSheets(videoObj, metrics, feedType) {
   formData.append("entry.1710546849", metrics.liked ? "TRUE" : "FALSE");
   formData.append("entry.1832054697", metrics.favorited ? "TRUE" : "FALSE");
   formData.append("entry.2112114283", metrics.watchedPercent);
-  formData.append("entry.9999999999", feedType); // extra field for Opaque/Partial/Transparent
+  formData.append("entry.9999999999", feedType);
 
   navigator.sendBeacon(formURL, formData);
 }
 
 // ---------- VIDEO SELECTION ----------
 function randomUnplayedVideo(){ 
-  const unplayed = videos.filter(v=>!playedVideos.has(v.src)); 
-  if(unplayed.length===0){playedVideos.clear(); return videos[Math.floor(Math.random()*videos.length)];} 
+  const unplayed = videos.filter(v => !playedVideos.has(v.src)); 
+  if(unplayed.length === 0){ playedVideos.clear(); return videos[Math.floor(Math.random()*videos.length)]; } 
   return unplayed[Math.floor(Math.random()*unplayed.length)]; 
 }
-function scoreFromMetrics(metrics){ return (metrics.favorited?2:0)+(metrics.liked?1:0)+(metrics.watchedPercent/100); }
+function scoreFromMetrics(metrics){ return (metrics.favorited ? 2 : 0) + (metrics.liked ? 1 : 0) + (metrics.watchedPercent / 100); }
 function chooseNextVideo(currentCategory){
   if(!recommendationMap[currentCategory]) return randomUnplayedVideo();
   const levels=["high","moderate","low"],candidateCats=[];
-  levels.forEach(l=>{const arr=recommendationMap[currentCategory][l];if(Array.isArray(arr)) arr.forEach(c=>{if(!candidateCats.includes(c))candidateCats.push(c);});});
+  levels.forEach(l=>{ const arr=recommendationMap[currentCategory][l]; if(Array.isArray(arr)) arr.forEach(c=>{ if(!candidateCats.includes(c)) candidateCats.push(c); }); });
   let bestCategory=null,bestScore=-Infinity;
-  candidateCats.forEach(cat=>{const key=cat.toLowerCase(),score=sessionCategoryScores[key]||0;if(score>bestScore){bestScore=score;bestCategory=key;}});
-  if(!bestCategory||bestScore<=0){const setCand=new Set(candidateCats.map(c=>c.toLowerCase()));const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&setCand.has(v.category));return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();}
-  const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&v.category===bestCategory);return unplayed.length?unplayed[Math.floor(Math.random()*unplayed.length)]:randomUnplayedVideo();
+  candidateCats.forEach(cat=>{ const key=cat.toLowerCase(),score=sessionCategoryScores[key]||0; if(score>bestScore){ bestScore=score; bestCategory=key; } });
+  if(!bestCategory||bestScore<=0){ const setCand=new Set(candidateCats.map(c=>c.toLowerCase())); const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&setCand.has(v.category)); return unplayed.length ? unplayed[Math.floor(Math.random()*unplayed.length)] : randomUnplayedVideo(); }
+  const unplayed=videos.filter(v=>!playedVideos.has(v.src)&&v.category===bestCategory); return unplayed.length ? unplayed[Math.floor(Math.random()*unplayed.length)] : randomUnplayedVideo();
 }
 
 // ---------- VIDEO CARD CREATION ----------
@@ -94,27 +94,22 @@ function createVideoCardPartial(videoObj){
   const expBox = document.createElement("div"); 
   expBox.className = "explanation-box";
 
-  // ---------- UPDATED updateExp ----------
-function updateExp() {
-  // only show explanation if this video was chosen to show it
-  if (!metrics.showExp) {
-    expBox.textContent = "";
-    return;
+  // decide once per video whether to show the message (~50%)
+  const showExp = Math.random() < 0.5;
+
+  function updateExp() {
+    if(!showExp){
+      expBox.textContent = "";
+      return;
+    }
+    const X = videoObj.category;
+    expBox.textContent = `This video is recommended to you because you showed high engagement to videos related to ${X}.`;
   }
 
-  const X = videoObj.category; // category of the current video
-
-  // simple, static message
-  expBox.textContent = `This video is recommended to you because you showed high engagement to videos related to ${X}.`;
-}
-
-  // ---------- END updateExp ----------
-
   vid.addEventListener("timeupdate", () => {
-    if(vid.duration>0){
-      const percent = Math.floor((vid.currentTime/vid.duration)*100);
+    if(vid.duration > 0){
+      const percent = Math.floor((vid.currentTime / vid.duration) * 100);
       metrics.watchedPercent = percent;
-
       if(percent - metrics.lastLogged >= 25){
         metrics.lastLogged = percent;
         logEngagementToSheets(videoObj, metrics, "Partial");
@@ -124,7 +119,7 @@ function updateExp() {
   });
 
   vid.addEventListener("ended", () => {
-    sessionCategoryScores[videoObj.category] += (metrics.favorited ? 2 : 0) + (metrics.liked ? 1 : 0) + (metrics.watchedPercent / 100);
+    sessionCategoryScores[videoObj.category] += scoreFromMetrics(metrics);
     playedVideos.add(videoObj.src);
     logEngagementToSheets(videoObj, metrics, "Partial");
   });
@@ -135,20 +130,12 @@ function updateExp() {
   const likeBtn = document.createElement("div"); 
   likeBtn.className = "action-btn"; 
   likeBtn.innerHTML = "❤";
-  likeBtn.onclick = () => {
-    metrics.liked = !metrics.liked; 
-    likeBtn.classList.toggle("liked", metrics.liked); 
-    updateExp(); 
-  };
+  likeBtn.onclick = () => { metrics.liked = !metrics.liked; likeBtn.classList.toggle("liked", metrics.liked); updateExp(); };
 
   const favBtn = document.createElement("div"); 
   favBtn.className = "action-btn"; 
   favBtn.innerHTML = "★";
-  favBtn.onclick = () => {
-    metrics.favorited = !metrics.favorited; 
-    favBtn.classList.toggle("favorited", metrics.favorited); 
-    updateExp(); 
-  };
+  favBtn.onclick = () => { metrics.favorited = !metrics.favorited; favBtn.classList.toggle("favorited", metrics.favorited); updateExp(); };
 
   const favText = document.createElement("div"); 
   favText.className = "favorite-label"; 
@@ -167,23 +154,26 @@ function updateExp() {
   card.appendChild(expBox); 
   card.appendChild(captionBox);
 
+  // initial update
   updateExp();
+
   return card;
 }
 
 // ---------- INITIALIZE FEED ----------
 function initPartialFeed(){
-  const feed=document.getElementById("feedContainer");
-  const start=randomUnplayedVideo(); playedVideos.add(start.src);
+  const feed = document.getElementById("feedContainer");
+  const start = randomUnplayedVideo(); 
+  playedVideos.add(start.src);
   feed.appendChild(createVideoCardPartial(start));
-  let current=start;
+  let current = start;
 
-  window.addEventListener("scroll", ()=>{
+  window.addEventListener("scroll", () => {
     if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 180){
-      const next=chooseNextVideo(current.category);
+      const next = chooseNextVideo(current.category);
       playedVideos.add(next.src);
       feed.appendChild(createVideoCardPartial(next));
-      current=next;
+      current = next;
     }
   });
 }
