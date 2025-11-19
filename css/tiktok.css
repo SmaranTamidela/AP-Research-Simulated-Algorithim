@@ -1,101 +1,142 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: #000;
-  font-family: Arial, sans-serif;
-  overflow-y: auto;
-}
+/* ----------------------------------- */
+/* TikTok-style Feed Container & Video */
+/* ----------------------------------- */
 
-.app-container {
-  width: 100%;
+body {
+  background-color: #000; /* dark TikTok background */
   display: flex;
   justify-content: center;
-  padding: 20px 0;
+  align-items: flex-start;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-.feed {
-  width: 360px;               /* 9:16 "phone" look */
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-}
-
-/* 9:16 video card */
-.video-card {
+#feedContainer {
+  width: 360px; /* adjust to your desired feed width */
+  margin: 40px auto;
   position: relative;
-  width: 100%;
-  height: 640px;             /* 9:16 container */
-  background: #111;
-  border-radius: 12px;
+  padding: 5px; /* space for inner border */
+  background: #000;
+  box-sizing: content-box;
+  border-radius: 16px;
   overflow: hidden;
 }
 
-/* video fills container */
-.video-card video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+/* Triple colored TikTok borders */
+#feedContainer::before,
+#feedContainer::after,
+#feedContainer .border-layer {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-radius: 16px;
+  animation: neonGlow 2s infinite alternate;
 }
 
-/* actions on right bottom */
+#feedContainer::before {
+  border: 3px solid #25F4EE; /* cyan */
+  top: -6px;
+  left: -6px;
+  width: calc(100% + 12px);
+  height: calc(100% + 12px);
+  z-index: 1;
+}
+
+#feedContainer::after {
+  border: 3px solid #FE2C55; /* pink */
+  top: -12px;
+  left: -12px;
+  width: calc(100% + 24px);
+  height: calc(100% + 24px);
+  z-index: 0;
+}
+
+#feedContainer .border-layer {
+  border: 3px solid #ffffff; /* white */
+  top: -3px;
+  left: -3px;
+  width: calc(100% + 6px);
+  height: calc(100% + 6px);
+  z-index: 2;
+}
+
+/* Neon glow animation */
+@keyframes neonGlow {
+  0% { box-shadow: 0 0 4px #25F4EE, 0 0 6px #FE2C55; }
+  50% { box-shadow: 0 0 10px #25F4EE, 0 0 10px #FE2C55; }
+  100% { box-shadow: 0 0 4px #25F4EE, 0 0 6px #FE2C55; }
+}
+
+/* ---------------------------- */
+/* Video Card Styling */
+/* ---------------------------- */
+
+.video-card {
+  margin: 20px 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #111;
+  position: relative;
+}
+
+.video-card video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+}
+
 .actions {
-  position: absolute;
-  right: 14px;
-  bottom: 20px;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  z-index: 10;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.6);
 }
 
 .action-btn {
-  font-size: 30px;
-  color: white;
+  font-size: 20px;
+  margin-right: 12px;
   cursor: pointer;
-  user-select: none;
-  transition: transform 0.14s;
+  color: #fff;
+  transition: transform 0.2s;
 }
-.action-btn:hover { transform: scale(1.15); }
 
-.liked { color: red !important; }
-.favorited { color: gold !important; }
+.action-btn:hover {
+  transform: scale(1.2);
+}
+
+.action-btn.liked {
+  color: #FE2C55;
+}
+
+.action-btn.favorited {
+  color: #25F4EE;
+}
 
 .favorite-label {
-  font-size: 12px;
-  color: white;
-  text-align: center;
-  margin-top: -6px;
-}
-
-/* explanation box */
-.explanation-box {
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.7);
   color: #fff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 13px;
-  line-height: 1.3;
-  text-align: center;
-  max-width: 300px;
-  z-index: 10;
-  white-space: pre-wrap;
+  font-size: 14px;
 }
 
-/* caption and username at bottom left */
 .caption-box {
-  position: absolute;
-  bottom: 18px;
-  left: 14px;
-  color: white;
-  z-index: 10;
+  padding: 10px;
+  color: #fff;
   font-size: 14px;
-  line-height: 1.2;
 }
+
 .caption-box .username {
   font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.explanation-box {
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-size: 13px;
+  margin: 5px 0;
+  border-radius: 8px;
 }
