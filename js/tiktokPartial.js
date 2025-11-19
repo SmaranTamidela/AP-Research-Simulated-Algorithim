@@ -119,12 +119,35 @@ function createVideoCardPartial(videoObj){
 
   const expBox=document.createElement("div"); expBox.className="explanation-box";
 
-  function updateExp(){
-    if(Math.random() < 0.5){
-      expBox.textContent = "You may like this video based on your recent activity.";
-      return;
-    }
+function updateExp(){
+  // only show the explanation for ~50% of videos
+  if(Math.random() >= 0.5){
+    expBox.textContent = "";
+    return;
   }
+
+  const X = videoObj.category;
+
+  // get the recommendation levels for this category
+  const rec = recommendationMap[X];
+  if(!rec) {
+    expBox.textContent = `We recommended this video relating to ${X} based on your activity.`;
+    return;
+  }
+
+  // pick categories for the message, randomizing between high and moderate
+  const highCats = rec.high || [];
+  const moderateCats = rec.moderate || [];
+  const allCats = [...highCats, ...moderateCats];
+
+  // shuffle and pick two
+  const shuffled = allCats.sort(() => 0.5 - Math.random());
+  const Y = shuffled[0] || "";
+  const Z = shuffled[1] || "";
+
+  expBox.textContent = `We recommended this video relating to ${X} because you have shown high engagement in videos related to ${Y} and ${Z}.`;
+}
+
 
   card.appendChild(vid); card.appendChild(actions); card.appendChild(expBox); card.appendChild(captionBox);
   updateExp();
