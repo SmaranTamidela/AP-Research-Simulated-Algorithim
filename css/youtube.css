@@ -58,8 +58,8 @@ body {
 }
 .action-btn:hover { transform: scale(1.15); }
 
-.liked { color: red !important; }
-.favorited { color: blue !important; }
+.liked { color: black !important; }
+.favorited { color: black !important; }
 
 .favorite-label {
   font-size: 12px;
