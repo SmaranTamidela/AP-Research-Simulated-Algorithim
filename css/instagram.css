@@ -1,132 +1,118 @@
 /* instagram.css */
 
-/* Reset & base */
-* {
-  box-sizing: border-box;
+/* Body & base */
+body {
   margin: 0;
   padding: 0;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  line-height: 1.4;
+  background: #000;
+  font-family: 'Arial', sans-serif;
+  overflow-y: auto;
 }
 
-/* Feed container */
-#feedContainer {
-  max-width: 600px;
-  margin: 20px auto;
+.app-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.feed {
+  width: 360px; /* 9:16 phone look */
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 0 10px;
-  background-color: #fafafa;
+  gap: 32px;
 }
 
 /* Video card */
 .video-card {
-  background-color: #fff;
-  border: 1px solid #dbdbdb;
-  border-radius: 12px;
+  position: relative;
+  width: 100%;
+  height: 640px; /* 9:16 container */
+  background: #111;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.1s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
 }
 
-.video-card:hover {
-  transform: scale(1.01);
-}
-
-/* Video element */
+/* Video fills container */
 .video-card video {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  border-bottom: 1px solid #dbdbdb;
-  border-radius: 12px 12px 0 0;
 }
 
-/* Actions container */
+/* Actions on right side */
 .actions {
+  position: absolute;
+  right: 14px;
+  bottom: 20px;
   display: flex;
-  align-items: center;
-  padding: 8px 12px;
-  gap: 12px;
+  flex-direction: column;
+  gap: 18px;
+  z-index: 10;
 }
 
-/* Like and favorite buttons */
 .action-btn {
+  font-size: 32px;
+  color: white;
   cursor: pointer;
-  font-size: 20px;
-  transition: transform 0.1s;
   user-select: none;
+  transition: transform 0.15s ease;
 }
-
 .action-btn:hover {
   transform: scale(1.2);
 }
 
-/* Liked & favorited states */
-.liked {
-  color: #ed4956;
-}
+.liked { color: #ed4956 !important; }
+.favorited { color: #facc15 !important; }
 
-.favorited {
-  color: #facc15;
-}
-
-/* Favorite label */
 .favorite-label {
-  font-size: 12px;
-  color: #999;
+  font-size: 11px;
+  color: white;
+  text-align: center;
+  margin-top: -4px;
 }
 
-/* Caption box */
-.caption-box {
-  padding: 8px 12px;
-  font-size: 14px;
-}
-
-/* Username styling */
-.username {
-  font-weight: bold;
-  margin-bottom: 4px;
-  display: block;
-}
-
-/* Explanation box for partial/opaque feeds */
+/* Explanation box (floating top) */
 .explanation-box {
-  padding: 6px 12px;
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30,30,30,0.75);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 12px;
   font-size: 13px;
-  color: #262626;
-  background-color: #f0f0f0;
-  border-top: 1px solid #dbdbdb;
-  border-bottom: 1px solid #dbdbdb;
-  font-style: italic;
+  line-height: 1.4;
+  text-align: center;
+  max-width: 320px;
+  z-index: 10;
+  white-space: pre-wrap;
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  #feedContainer {
-    padding: 0 5px;
-  }
-
-  .actions {
-    padding: 6px 8px;
-    gap: 8px;
-  }
-
-  .action-btn {
-    font-size: 18px;
-  }
-
-  .caption-box {
-    font-size: 13px;
-    padding: 6px 8px;
-  }
-
-  .explanation-box {
-    font-size: 12px;
-    padding: 5px 8px;
-  }
+/* Caption & username at bottom left */
+.caption-box {
+  position: absolute;
+  bottom: 18px;
+  left: 14px;
+  color: #fff;
+  z-index: 10;
+  font-size: 14px;
+  line-height: 1.3;
+}
+.caption-box .username {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 2px;
 }
 
+/* Responsive tweaks for smaller screens */
+@media (max-width: 400px) {
+  .feed { width: 100%; }
+  .actions { gap: 14px; right: 10px; }
+  .action-btn { font-size: 28px; }
+  .explanation-box { font-size: 12px; max-width: 90%; padding: 6px 10px; }
+  .caption-box { font-size: 13px; bottom: 12px; }
+}
