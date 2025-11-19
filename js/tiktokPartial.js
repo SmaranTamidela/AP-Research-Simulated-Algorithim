@@ -41,7 +41,13 @@ const videoMetrics = new Map();
 
 videos.forEach(v=>{
   sessionCategoryScores[v.category]=0;
-  videoMetrics.set(v.src,{watchedPercent:0,liked:false,favorited:false,lastLogged:0});
+ videoMetrics.set(v.src, {
+  watchedPercent: 0,
+  liked: false,
+  favorited: false,
+  lastLogged: 0,
+  showExp: Math.random() < 0.5 // decide once per video
+});
 });
 
 // ---------- LOGGING TO GOOGLE FORMS ----------
@@ -118,22 +124,30 @@ function createVideoCardPartial(videoObj){
   captionBox.innerHTML=`<div class="username">${videoObj.username}</div>${videoObj.caption}`;
 
   const expBox=document.createElement("div"); expBox.className="explanation-box";
-
 function updateExp(){
-  // only show the explanation for ~50% of videos
-  if(Math.random() >= 0.5){
+  // only show explanation if this video was chosen to show it
+  if(!metrics.showExp){
     expBox.textContent = "";
     return;
   }
 
   const X = videoObj.category;
-
-  // get the recommendation levels for this category
   const rec = recommendationMap[X];
-  if(!rec) {
+  if(!rec){
     expBox.textContent = `We recommended this video relating to ${X} based on your activity.`;
     return;
   }
+
+  const highCats = rec.high || [];
+  const moderateCats = rec.moderate || [];
+  const allCats = [...highCats, ...moderateCats];
+
+  const shuffled = allCats.sort(() => 0.5 - Math.random());
+  const Y = shuffled[0] || "";
+  const Z = shuffled[1] || "";
+
+  expBox.textContent = `We recommended this video relating to ${X} because you have shown high engagement in videos related to ${Y} and ${Z}.`;
+}
 
   // pick categories for the message, randomizing between high and moderate
   const highCats = rec.high || [];
