@@ -1,4 +1,3 @@
-// js/instagramOpaque.js
 const recommendationMap = {
   "earth": { high:["science","technology"], moderate:["travel","animal"], low:["art","knitting"] },
   "food": { high:["travel","party"], moderate:["science","technology"], low:["knitting","art"] },
@@ -44,7 +43,7 @@ videos.forEach(v => {
   videoMetrics.set(v.src, { watchedPercent: 0, liked: false, favorited: false });
 });
 
-// ---------- LOGGING TO NEW GOOGLE FORM ----------
+// ---------- LOGGING VIA GOOGLE FORM ----------
 function logEngagementToSheets(videoObj, metrics) {
   const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSe70_oKqzX8t2MZhNItXxsNTz7NxsaKqnDqu9HCnwbMwjYMUQ/formResponse";
   const formData = new FormData();
@@ -59,7 +58,6 @@ function logEngagementToSheets(videoObj, metrics) {
   navigator.sendBeacon(formURL, formData);
 }
 
-// ---------- VIDEO SELECTION ----------
 function randomUnplayedVideo() {
   const unplayed = videos.filter(v => !playedVideos.has(v.src));
   if (unplayed.length === 0) {
@@ -105,7 +103,6 @@ function chooseNextVideo(currentCategory) {
   return unplayed.length ? unplayed[Math.floor(Math.random() * unplayed.length)] : randomUnplayedVideo();
 }
 
-// ---------- VIDEO CARD CREATION ----------
 function createVideoCard(videoObj) {
   const card = document.createElement("div");
   card.className = "video-card";
@@ -123,10 +120,12 @@ function createVideoCard(videoObj) {
   vid.addEventListener("timeupdate", () => {
     if (vid.duration > 0) {
       metrics.watchedPercent = Math.min(100, (vid.currentTime / vid.duration) * 100);
+
+      // Check for 25% increments
       const percentChunk = Math.floor(metrics.watchedPercent / 25) * 25;
       if (!loggedPercents.has(percentChunk) && percentChunk > 0) {
         loggedPercents.add(percentChunk);
-        logEngagementToSheets(videoObj, { ...metrics });
+        logEngagementToSheets(videoObj, { ...metrics }); // log current metrics
       }
     }
   });
@@ -134,6 +133,7 @@ function createVideoCard(videoObj) {
   vid.addEventListener("ended", () => {
     sessionCategoryScores[videoObj.category] += scoreFromMetrics(metrics);
     playedVideos.add(videoObj.src);
+    // Log final metrics at 100%
     if (!loggedPercents.has(100)) logEngagementToSheets(videoObj, { ...metrics });
   });
 
@@ -175,7 +175,7 @@ function createVideoCard(videoObj) {
   return card;
 }
 
-// ---------- INITIALIZE FEED ----------
+
 function initOpaqueFeed() {
   const feed = document.getElementById("feedContainer");
   const start = randomUnplayedVideo();
@@ -195,3 +195,5 @@ function initOpaqueFeed() {
 }
 
 initOpaqueFeed();
+ 
+
